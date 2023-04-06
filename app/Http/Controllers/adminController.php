@@ -88,4 +88,7 @@ class adminController extends Controller
         return view('frontend_admin.sales');
     }
 
+
+    
+
 }
