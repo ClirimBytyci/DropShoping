@@ -9,6 +9,7 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class ProductPageController extends Controller
@@ -22,14 +23,20 @@ class ProductPageController extends Controller
     {
         $isLogin = Auth::check();
         $user = auth()->user();
-        $products = Product::where('active',true)->with('media')->get();
+        $product = Product::where('active',true)->with('media')->get();
+        $media = Media::all()->with('product')->get();
+        $productMedia = DB::table('products')
+            ->join('media', 'products.id', '=', 'media.product_id')
+            ->select('media.*')
+            ->get();
+        dd($productMedia);
 //        $product = Product::select('name', 'product_number', 'description', 'stock', 'tax_status', 'price')
 //            ->where('active', true)
 //            ->with('media')->get();
 //        $products = Product::where('active', true)->with('mediaUrls')->get();
 
 
-        dd($products);
+//        dd($products);
 //        dd($product['media']['url_main']);
         $data = [];
         if ($product){

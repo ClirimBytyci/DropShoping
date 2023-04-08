@@ -27,8 +27,7 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 8, 2)->nullable();
             $table->string('custom_fields', 1000)->nullable();
             $table->timestamps();
-
-            $table->foreign('product_media_id')->references('id')->on('media');
+//            $table->foreign('product_media_id')->references('id')->on('media');
         });
     }
 
@@ -39,9 +38,6 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropForeign(['product_media_id']);
-        });
         Schema::dropIfExists('products');
     }
 }

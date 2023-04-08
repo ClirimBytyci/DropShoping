@@ -10,37 +10,34 @@ use Ramsey\Uuid\Uuid;
 class Product extends Model
 {
     use HasFactory;
-
-    public function mediaUrls()
+//    public function media()
+//    {
+//        return $this->belongsTo(Media::class, 'id');
+//    }
+    public function media()
     {
-        return $this->belongsTo(Media::class, 'product_media_id')->select(['id', 'url_main', 'url_additional']);
+        return $this->hasMany(Media::class);
     }
 
     protected $primaryKey = 'id';
 
     protected $fillable = [
-//        'id',
+        'id',
         'name',
         'description',
         'stock',
         'product_number',
         'active',
-//        'parent_id',
+        'parent_id',
         'tax_status',
-//        'product_manufacturer_id',
-//        'product_media_id',
+        'product_manufacturer_id',
+        'product_media_id',
         'price',
         'custom_fields',
     ];
 
     protected $casts = [
         'id' => 'string'
-    ];
-    protected $guarded = [
-        'id',
-        'parent_id',
-        'product_manufacturer_id',
-        'product_media_id'
     ];
 
     /**
