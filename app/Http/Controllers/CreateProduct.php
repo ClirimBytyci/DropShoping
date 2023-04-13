@@ -27,28 +27,46 @@ class CreateProduct extends Controller
         if (isset($data['active']) && $data['active'] == 'on' ){
             $active = 1;
         }
-$productId = Uuid::uuid4()->toString();
+
+
         $product = Product::create([
-            'id'=> Uuid::uuid4()->toString(),
+//            'id' => Uuid::uuid4(),
             'name'=> $data['name'],
             'product_number' =>$data['product-number'],
             'description' => $data['description'],
             'stock'=> $data['stock'],
             'active'=> $active,
             'tax_status'=>$data['tax'],
-            'product_media_id'=>Uuid::uuid4()->toString(),
+            'product_media_id'=>Uuid::uuid4(),
             'price'=> $data['price'],
         ]);
 
-        dd($product);
-
         Media::create([
-            'id' => Uuid::uuid4()->toString(),
-            'product_id'=> '0911af99-111d-4a8d-9982-f1ace258baa6',
+//            'id' => Uuid::uuid4(),
+            'product_id'=> $product->id,
             'user_id'=> null,
             'url_main' => config('app.url').'/images/product/'.$imageName,
             'url_additional' => json_encode($additionalPhoto),
         ]);
+
+//        $product = new Product();
+//        $product->id = Uuid::uuid4();
+//        $product->name = $data['name'];
+//        $product->product_number = $data['product-number'];
+//        $product->description = $data['description'];
+//        $product->stock = $data['stock'];
+//        $product->active = $active;
+//        $product->tax_status = $data['tax'];
+//        $product->product_media_id = Uuid::uuid4();
+//        $product->price = $data['price'];
+//        $product->save();
+//
+//        $media = new Media();
+//        $media->id = Uuid::uuid4();
+//        $media->product_id = $product->id;
+//        $media->url_main = config('app.url').'/images/product/'.$imageName;
+//        $media->url_additional = json_encode($additionalPhoto);
+//        $media->save();
         return back();
     }
 

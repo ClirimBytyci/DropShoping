@@ -10,39 +10,36 @@ use Ramsey\Uuid\Uuid;
 class Product extends Model
 {
     use HasFactory;
-//    public function media()
-//    {
-//        return $this->belongsTo(Media::class, 'id');
-//    }
-    public function media()
-    {
-        return $this->hasMany(Media::class);
-    }
-
-    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'id',
         'name',
+        'product_number',
         'description',
         'stock',
-        'product_number',
         'active',
         'parent_id',
         'tax_status',
         'product_manufacturer_id',
         'product_media_id',
         'price',
-        'custom_fields',
+        'custom_fields'
     ];
 
-    protected $casts = [
-        'id' => 'string'
-    ];
+    protected $primaryKey = 'id';
 
-    /**
-     *  Setup model event hooks
-     */
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
+//    protected static function boot()
+//    {
+//        parent::boot();
+//
+//        static::creating(function ($model) {
+//            $model->id = Str::uuid()->toString();
+//        });
+//    }
+
     public static function boot()
     {
         parent::boot();
@@ -50,5 +47,9 @@ class Product extends Model
             $uuid = Uuid::uuid4();
             $model->id = $uuid->toString();
         });
+    }
+    public function media()
+    {
+        return $this->hasOne(Media::class);
     }
 }

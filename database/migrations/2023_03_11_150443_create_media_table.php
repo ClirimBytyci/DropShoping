@@ -19,9 +19,16 @@ class CreateMediaTable extends Migration
             $table->uuid('user_id')->nullable();
             $table->string('url_main')->nullable();
             $table->string('url_additional')->nullable();
-            $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
         });
+
+        Schema::table('media', function (Blueprint $table) {
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('cascade');
+        });
+
     }
 
     /**
