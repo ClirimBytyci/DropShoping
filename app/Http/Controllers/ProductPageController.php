@@ -3,24 +3,78 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Category;
 use App\Models\Media;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use function PHPUnit\Framework\isNull;
 
 class ProductPageController extends Controller
 {
     public function productPage(Request $request)
     {
-        return view('productPage');
+        $categories = Category::where('visible', true)->get();
+        $categories->each(function ($category) {
+            unset($category->created_at);
+            unset($category->updated_at);
+            unset($category->visible);
+        });
+        return view('productPage', ['categories'=>$categories, 'categoryName' => null]);
     }
 
     public function productData(Request $request)
     {
+        $categoryName = $request->request->all()['category'];
         $isLogin = Auth::check();
         $user = auth()->user();
-        $product = Product::where('active',true)->with('media')->get();
+
+        if (is_null($categoryName)){
+            $product = Product::where('active', true)
+                ->with('media')
+                ->with('category')
+                ->select('id', 'name', 'product_number', 'category_id','description', 'stock', 'active', 'parent_id', 'tax_status', 'product_manufacturer_id', 'product_media_id', 'price', 'custom_fields')
+                ->get()
+                ->map(function ($product) {
+                    $product->id = encrypt($product->id);
+                    $media = $product->media;
+                    if ($media) {
+                        $media->product_id = encrypt($media->product_id);
+                        unset($media->product_id, $media->created_at, $media->updated_at, $media->user_id);
+                    }
+                    $category = $product->category;
+                    if ($category) {
+                        unset($category->created_at, $category->updated_at, $category->visible);
+                    }
+                    return $product;
+                });
+        }else {
+            $product = Product::where('active', true)
+                ->with('media')
+                ->with('category')
+                ->whereHas('category', function ($query) use ($categoryName) {
+                    $query->where('name', $categoryName);
+                })
+                ->select('id', 'name', 'product_number', 'category_id','description', 'stock', 'active', 'parent_id', 'tax_status', 'product_manufacturer_id', 'product_media_id', 'price', 'custom_fields')
+                ->get()
+                ->map(function ($product) {
+                    $product->id = encrypt($product->id);
+                    $media = $product->media;
+                    if ($media) {
+                        $media->product_id = encrypt($media->product_id);
+                        unset($media->product_id, $media->created_at, $media->updated_at, $media->user_id);
+                    }
+                    $category = $product->category;
+                    if ($category) {
+                        unset($category->created_at, $category->updated_at, $category->visible);
+                    }
+                    return $product;
+                });
+        }
+
+
+
         $data = [];
         if ($product){
             $data['products'] = $product;
@@ -56,19 +110,41 @@ class ProductPageController extends Controller
 
     public function insideProductPage(Request $request, $productTitle, $productNumber){
 
-        $product = Product::where('product_number', $productNumber)
-            ->where('name', $productTitle)
-            ->first();
+        $id = decrypt($request->query->all()['id']);
+
+        $product = Product::where('id', $id)->where('name', $productTitle)->where('product_number', $productNumber)->with('media')->get()->first();
+
         if (!$product) {
             abort(404);
         }
-        $id = '06805208-50a7-415a-aad3-31e8988fd328';
 
+        $productData = [
+            'name'=> $product['name'],
+            'description'=> $product['description'],
+            'stock'=> $product['stock'],
+            'tax_status'=> $product['tax_status'],
+            'price'=> $product['price'],
+            'url_main'=> $product->media['url_main'],
+            'url_additional'=> json_decode($product->media['url_additional']),
+            'id'=>$request->query->all()['id']
+        ];
 
         return view('inProductPage', [
-            'id'=>Crypt::encryptString($id),
-            'productTitle' => $productTitle,
-            'productNumber'=>$productNumber
+            'productData'=>$productData
         ]);
+    }
+
+    public function category($name){
+        $category = Category::where('name', $name)->first();
+        if (!$category) {
+            abort(404);
+        }
+        $categories = Category::where('visible', true)->get();
+        $categories->each(function ($category) {
+            unset($category->created_at);
+            unset($category->updated_at);
+            unset($category->visible);
+        });
+        return view('categoryPage', ['categories'=>$categories, 'categoryName'=>$name]);
     }
 }

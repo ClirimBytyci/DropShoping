@@ -17,14 +17,12 @@ class Media extends Model
     ];
 
     protected $primaryKey = 'id';
-
     protected $keyType = 'string';
-
     public $incrementing = false;
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
     protected static function boot()
     {

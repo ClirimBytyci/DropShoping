@@ -13,14 +13,14 @@ class checkOutProduct extends Controller
     public function addToCart(Request $request)
     {
         $product = $request->request->all()['product'];
-
         $user = auth()->user();
-        $productId = $product['id'];
+        $productId = decrypt($product['id']);
         $productName = $product['name'];
         $price = $product['price'];
         $taxRate = 0.18;
         $quantity = 1;
         $orderNumber = 10000;
+        $photo = $product['media']['url_main'];
 
         $productEntity = Product::where('id', $productId)->first();
 
@@ -42,6 +42,7 @@ class checkOutProduct extends Controller
                                 'netPrice' => $price - $price * $taxRate,
                                 'tax' => $taxRate,
                             ],
+                            'photo'=> $photo
                         ]
                     ],
 
@@ -101,6 +102,7 @@ class checkOutProduct extends Controller
                             'netPrice' => $price - $price * $taxRate,
                             'tax' => $taxRate,
                         ],
+                        'photo'=> $photo
                     ];
 
                     $existingPayload = Cart::where('user_id', $user['id'])->first()->payload;

@@ -15,6 +15,9 @@
     }
 </style>
 <body class="container w-50 pt-5 mt-4">
+@error('additionalPhotos')
+<div class="alert alert-danger">{{ $message }}</div>
+@enderror
 <div style="border-radius: 15px; background-color: #ded9d9;" class="p-5">
     <form method="post" action="{{ route('create.product') }}" enctype="multipart/form-data">
         @csrf
@@ -35,10 +38,9 @@
             <div class="col-md-6">
                 <label for="category" class="form-label">Category</label>
                 <select class="form-select" id="category" name="category">
-                    <option value="standard" selected>Laptop</option>
-                    <option value="high">Electronic</option>
-                    <option value="high">Books</option>
-                    <option value="high">Telephone</option>
+                    @foreach($categories as $category)
+                        <option value="{{$category['id']}}" selected>{{$category['name']}}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="col-md-4">
@@ -81,7 +83,7 @@
             </div>
             <div class="col-md-6">
                 <label for="additional-photos" class="form-label">Additional Photos</label>
-                <input class="form-control" type="file" id="additional-photos" name="additional-photos[]" multiple>
+                <input class="form-control" type="file" id="additional-photos" name="additionalPhotos[]" multiple>
             </div>
         </div>
         <div class="row mb-3">

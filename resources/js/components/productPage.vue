@@ -5,8 +5,8 @@
             <!-- Container wrapper -->
             <div class="container-fluid">
                 <!-- Navbar brand -->
-                <a class="navbar-brand m-0 mt-lg-0" href="#">
-                    <h5 class="pt-1"><img height="100px" src="../../../2023-03-22_22-33.png"></h5>
+                <a class="navbar-brand m-0 mt-lg-0" @click="homePage" style="cursor: pointer">
+                    <img height="80px" src="../../../2023-03-22_22-33.png" >
                 </a>
                 <!-- Toggle button -->
                 <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
@@ -19,23 +19,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left links -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item m-lg-4">
-                            <a class="nav-link text-dark" href="#">Telephone</a>
-                        </li>
-                        <li class="nav-item m-lg-4">
-                            <a class="nav-link text-dark" href="#">TV</a>
-                        </li>
-                        <li class="nav-item m-lg-4">
-                            <a class="nav-link text-dark" href="#">Laptop</a>
-                        </li>
-                        <li class="nav-item m-lg-4">
-                            <a class="nav-link text-dark" href="#">Electronic</a>
-                        </li>
-                        <li class="nav-item m-lg-4">
-                            <a class="nav-link text-dark" href="#">Books</a>
-                        </li>
-                        <li class="nav-item m-lg-4">
-                            <a class="nav-link text-dark" href="#">Bags</a>
+                        <li class="nav-item m-lg-4" v-for="category in categories" :key="category.id" style="cursor: pointer">
+                            <a :id="category.id" @click="categoryPage(category.id, category.name)" class="nav-link text-dark">{{ category.name }}</a>
                         </li>
                     </ul>
                     <!-- Left links -->
@@ -158,7 +143,6 @@
                 <div class="row">
                     <div v-for="product in products"
                          class="col-md-6 col-lg-3 mb-4 pb-4 align-items-center justify-content-center">
-
                         <div class="card shadow-lg">
                             <div class="d-flex justify-content-between p-3">
                                 <p class="lead mb-0">Today's Combo Offer</p>
@@ -169,15 +153,16 @@
                                 </div>
                             </div>
 
-                            <img :src="product.media.url_main"
-                                 @click = "insideProduct(product.id, product.name, product.product_number)"
-                                 height="auto"
-                                 style="cursor: pointer"
-                                 class="card-img-top p-3" alt="Laptop"/>
+                            <div class="heightPhoto">
+                                <img :src="product.media.url_main"
+                                     @click = "insideProduct(product.id, product.name, product.product_number)"
+                                     style="cursor: pointer"
+                                     class="card-img-top p-3" alt="photo"/>
+                            </div>
 
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
-                                    <p class="small"><a href="#!" class="text-muted">Laptops</a></p>
+                                    <p style="cursor: pointer" class="small"><a @click="categoryPage(product.category.id, product.category.name)" class="text-muted">{{product.category.name}}</a></p>
                                     <p class="small text-danger"><s>${{ (product.price * 1.2).toFixed(2) }}</s></p>
                                 </div>
 
@@ -229,7 +214,7 @@
                             <p class="card-text">Total: {{ lineItem.quantity * lineItem.price.totalPrice }}</p>
                         </div>
                         <div class="col-md-6">
-                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/7.webp"
+                            <img :src="lineItem.photo"
                                  class="img-fluid" alt="Product Photo" style="">
                         </div>
                     </div>
@@ -248,53 +233,66 @@
 
 
         <!-- Footer -->
-        <footer class="bg-primary text-center text-white fi">
-            <!-- Grid container -->
-            <div class="container p-4 pb-0">
-                <!-- Section: Social media -->
-                <section class="mb-4">
-                    <!-- Facebook -->
-                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                        class="fab fa-facebook-f"></i></a>
+<!--        <footer class="bg-primary text-center text-white fi">-->
+<!--            &lt;!&ndash; Grid container &ndash;&gt;-->
+<!--            <div class="container p-4 pb-0">-->
+<!--                &lt;!&ndash; Section: Social media &ndash;&gt;-->
+<!--                <section class="mb-4">-->
+<!--                    &lt;!&ndash; Facebook &ndash;&gt;-->
+<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
+<!--                        class="fab fa-facebook-f"></i></a>-->
 
-                    <!-- Twitter -->
-                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                        class="fab fa-twitter"></i></a>
+<!--                    &lt;!&ndash; Twitter &ndash;&gt;-->
+<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
+<!--                        class="fab fa-twitter"></i></a>-->
 
-                    <!-- Google -->
-                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                        class="fab fa-google"></i></a>
+<!--                    &lt;!&ndash; Google &ndash;&gt;-->
+<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
+<!--                        class="fab fa-google"></i></a>-->
 
-                    <!-- Instagram -->
-                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                        class="fab fa-instagram"></i></a>
+<!--                    &lt;!&ndash; Instagram &ndash;&gt;-->
+<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
+<!--                        class="fab fa-instagram"></i></a>-->
 
-                    <!-- Linkedin -->
-                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                        class="fab fa-linkedin-in"></i></a>
+<!--                    &lt;!&ndash; Linkedin &ndash;&gt;-->
+<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
+<!--                        class="fab fa-linkedin-in"></i></a>-->
 
-                    <!-- Github -->
-                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                        class="fab fa-github"></i></a>
-                </section>
-                <!-- Section: Social media -->
-            </div>
-            <!-- Grid container -->
+<!--                    &lt;!&ndash; Github &ndash;&gt;-->
+<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
+<!--                        class="fab fa-github"></i></a>-->
+<!--                </section>-->
+<!--                &lt;!&ndash; Section: Social media &ndash;&gt;-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Grid container &ndash;&gt;-->
 
-            <!-- Copyright -->
-            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-                © 2020 Copyright:
-                <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
-            </div>
-            <!-- Copyright -->
-        </footer>
+<!--            &lt;!&ndash; Copyright &ndash;&gt;-->
+<!--            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">-->
+<!--                © 2020 Copyright:-->
+<!--                <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Copyright &ndash;&gt;-->
+<!--        </footer>-->
         <!-- Footer -->
     </div>
 </template>
 
 
 <script>
+import {array} from "../../../public/frontend_admin/src/js/mdb/util";
+
 export default {
+    props: {
+        categories: {
+            type: Array,
+            required: true
+        },
+        category: {
+            type: String,
+            required: false
+        }
+    },
+
     data() {
         return {
             products: [],
@@ -318,6 +316,7 @@ export default {
     },
 
     created() {
+        console.log(this.category)
         axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     },
 
@@ -352,12 +351,12 @@ export default {
         },
 
         refreshCart() {
-            axios.get('/api/products',{
+            axios.post('/api/products',{
+                category: this.category,
                 _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             })
                 .then(response => {
                     this.products = response.data.products;
-                    console.log(this.products);
                     this.isLogin = response.data.account.isLogin;
                     this.name = response.data.account.name;
                     this.img = response.data.account.url;
@@ -401,7 +400,7 @@ export default {
         },
 
         insideProduct(id, name, number) {
-            window.location.href = `/product/${name}/${number}`;
+            window.location.href = `/product/${name}/${number}?id=${id}`;
         },
 
         logIn() {
@@ -418,7 +417,15 @@ export default {
                 .catch(error => {
                     console.log(error);
                 });
+        },
+
+        categoryPage(id, name){
+            window.location.href = `/category/${name}`;
+        },
+        homePage(){
+            window.location.href = `/`;
         }
+
     }
 }
 </script>
@@ -432,7 +439,17 @@ export default {
         border-radius: 0;
     }
 }
+.heightPhoto {
+    height: 167px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.heightPhoto img {
+    max-height: 100%;
+    max-width: fit-content;
+}
 .shopping-cart {
     opacity: 1;
     width: 24%;

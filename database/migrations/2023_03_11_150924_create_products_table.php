@@ -17,6 +17,7 @@ class CreateProductsTable extends Migration
             $table->uuid('id')->primary()->unique();
             $table->string('name')->nullable();
             $table->string('product_number')->nullable();
+            $table->uuid('category_id')->nullable();
             $table->longText('description')->nullable();
             $table->decimal('stock', 8, 2)->nullable();
             $table->boolean('active')->default(0);
@@ -27,7 +28,7 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 8, 2)->nullable();
             $table->string('custom_fields', 1000)->nullable();
             $table->timestamps();
-//            $table->foreign('product_media_id')->references('id')->on('media');
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 

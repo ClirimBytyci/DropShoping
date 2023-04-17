@@ -6,6 +6,7 @@ use App\Http\Controllers\EditProfileClient;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\AuthenticateMiddleware;
 use App\Models\Cart;
+use App\Models\Category;
 use App\Models\Media;
 use App\Models\Orders;
 use App\Models\Post;
@@ -45,10 +46,11 @@ Route::get('admin/sales', [adminController::class, 'sales'])->name('admin.sales'
 
 
 Route::post('/api/cart', [checkOutProduct::class, 'addToCart'])->name('products.frontend');
-Route::get('/product/page', [ProductPageController::class, 'productPage'])->name('product.page');
-Route::get('/api/products', [ProductPageController::class, 'productData']);
+Route::get('/', [ProductPageController::class, 'productPage'])->name('product.page');
+Route::post('/api/products', [ProductPageController::class, 'productData']);
 
 Route::get('/product/{productTitle}/{productNumber}', [ProductPageController::class,'insideProductPage']);
+Route::get('/category/{name}', [ProductPageController::class,'category']);
 
 Route::delete('/api/delete/{lineItemId}', [checkOutProduct::class, 'deleteFromCart']);
 Route::get('/edit/profile/{name}', [EditProfileClient::class,'profileClient'])->middleware(Authenticate::class);
@@ -56,7 +58,7 @@ Route::post('/edit/profile/{id}', [EditProfileClient::class,'editProfile']);
 
 
 Route::get('/create/product', [CreateProduct::class,'viewProduct']);
-Route::post('/create/product/test', [CreateProduct::class,'createProduct'])->name('create.product');
+Route::post('/create/product/create', [CreateProduct::class,'createProduct'])->name('create.product');
 
 
 //Route::post('admin/recovery/password', [RcoveryPasswordAdminController::class, 'recoveryPassword'])->name('admin.recovery.password')->middleware(Authenticate::class);
@@ -90,11 +92,11 @@ Route::post('/api/save-data', function (Request $request) {
     }
 })->middleware(Authenticate::class);
 
-Route::post('/test', function (Request $request){
-    $hashedId = $request->request->all()['id'];
-    dd(Crypt::decryptString($hashedId));
-    $product = Product::where('id', Crypt::decryptString($hashedId))->first();
-    dd($product);
+Route::get('/test12', function (Request $request){
+    Category::create([
+        'name'=> 'Mobile',
+        'visible'=>true
+    ]);
 });
 
 
