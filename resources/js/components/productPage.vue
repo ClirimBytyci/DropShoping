@@ -1,101 +1,85 @@
 <template>
-    <div>
-        <!-- Navbar -->
-        <div class="navbar navbar-expand-lg navbar-dark fixed-top bg-light m-0 p-0" style="left: 0; height: 65px">
+    <div class="container container-add-clr">
+        <div class="navbar navbar-expand-lg navbar-dark fixed-top bg-light m-0 p-0 nav-bar-add-clr" style="left: 0; height: 65px">
             <!-- Container wrapper -->
             <div class="container-fluid">
                 <!-- Navbar brand -->
-                <a class="navbar-brand m-0 mt-lg-0" @click="homePage" style="cursor: pointer">
-                    <img height="80px" src="../../../2023-03-22_22-33.png" >
-                </a>
-                <!-- Toggle button -->
-                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-                        data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
-                </button>
-
-                <!-- Collapsible wrapper -->
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left links -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <div>
+                    <a class="navbar-brand m-0 mt-lg-0" @click="homePage" style="cursor: pointer">
+                        <img height="40px" src="../../../Free_logo.svg.png" >
+                    </a>
+                </div>
+                <div class="scroll-list">
+                    <ul class="me-auto mb-2 mb-lg-0">
                         <li class="nav-item m-lg-4" v-for="category in categories" :key="category.id" style="cursor: pointer">
-                            <a :id="category.id" @click="categoryPage(category.id, category.name)" class="nav-link text-dark">{{ category.name }}</a>
+                            <a :id="category.id" @click="categoryPage(category.id, category.name)">{{ category.name }}</a>
                         </li>
                     </ul>
-                    <!-- Left links -->
-
-                    <!-- Right elements -->
-                    <div class="input-group rounded w-25">
-                        <input type="search" class="form-control rounded"  placeholder="Search" aria-label="Search"
-                               aria-describedby="search-addon"/>
-                        <span class="input-group-text border-0" id="search-addon">
-                                <i class="fas fa-search"></i>
-                            </span>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-start">
-                        <div class="dropdown">
-                            <a class="text-reset me-3 hidden-arrow" @click="clickCart" role="button"
-                               aria-expanded="false">
-                                <i class="fas fa-bell text-white"></i>
-                                <span class="badge rounded-pill badge-notification bg-danger"
-                                      style="font-size: 10px">{{ notificationCart }}</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                     class="bi bi-cart" viewBox="0 0 16 16">
-                                    <path
-                                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                </svg>
-                            </a>
-                        </div>
-                        <!-- Avatar -->
-                        <div class="dropdown" id="dropdown">
-                            <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
-                               id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown"
-                               aria-expanded="false">
-                                <img v-if="isLogin && img " :src="img" class="rounded-circle"
-                                     height="40px" alt="Black and White Portrait of a Man" loading="lazy"/>
-                                <img v-else
-                                     src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-unknown-social-media-user-photo-default-avatar-profile-icon-vector-unknown-social-media-user-184816085.jpg"
-                                     class="rounded-circle"
-                                     height="40px" alt="Black and White Portrait of a Man" loading="lazy"/>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
-                                <li v-if="name && account.id"  style="cursor:pointer;">
-                                    <a class="dropdown-item" @click="editProfile(name, account.id)">My profile({{ this.name }})</a>
-                                </li>
-                                <li v-if="isLogin">
-                                    <a @click="logOut" class="dropdown-item" href="#">
-                                        LogOut
-                                    </a>
-                                </li>
-                                <li v-else>
-                                    <a @click="logIn" class="dropdown-item" href="#">
-                                        LogIn
-                                    </a>
-                                    <a @click="register" class="dropdown-item" href="#">
-                                        Register
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- Right elements -->
                 </div>
-                <label for="navbarDropdownMenuAvatar" style="margin: auto 0.5%" v-if="name">{{ name }}</label>
+
+<!--                <div class="input-group rounded w-25">-->
+<!--                    <input type="search" class="form-control rounded"  placeholder="Search" aria-label="Search"-->
+<!--                           aria-describedby="search-addon"/>-->
+<!--                    <span class="input-group-text border-0" id="search-addon">-->
+<!--                                <i class="fas fa-search"></i>-->
+<!--                            </span>-->
+<!--                </div>-->
+                <div class="d-flex align-items-center justify-content-start">
+                    <div class="dropdown">
+                        <a class="text-reset me-3 hidden-arrow" @click="clickCart" role="button"
+                           aria-expanded="false">
+                            <i class="fas fa-bell text-white"></i>
+                            <span class="badge rounded-pill badge-notification bg-danger" style="font-size: 10px">{{ notificationCart }}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                 class="bi bi-cart" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <!-- Avatar -->
+                    <div class="dropdown" id="dropdown">
+                        <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
+                           id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown"
+                           aria-expanded="false">
+                            <img v-if="isLogin && img " :src="img" class="rounded-circle"
+                                 height="40px" alt="Black and White Portrait of a Man" loading="lazy"/>
+                            <img v-else
+                                 src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-unknown-social-media-user-photo-default-avatar-profile-icon-vector-unknown-social-media-user-184816085.jpg"
+                                 class="rounded-circle"
+                                 height="40px" alt="Black and White Portrait of a Man" loading="lazy"/>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                            <li v-if="name && account.id"  style="cursor:pointer;">
+                                <a class="dropdown-item" @click="editProfile(name, account.id)">My profile({{ this.name }})</a>
+                            </li>
+                            <li v-if="isLogin">
+                                <a @click="logOut" class="dropdown-item" href="#">
+                                    LogOut
+                                </a>
+                            </li>
+                            <li v-else>
+                                <a @click="logIn" class="dropdown-item" href="#">
+                                    LogIn
+                                </a>
+                                <a @click="register" class="dropdown-item" href="#">
+                                    Register
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!--                <label for="navbarDropdownMenuAvatar" style="margin: auto 0.5%" v-if="name">{{ name }}</label>-->
                 <!-- Collapsible wrapper -->
             </div>
             <!-- Container wrapper -->
-            <div v-if="alertCart" class="alert alert-danger" role="alert"
-                 style="position: fixed;right: inherit;top: 66px">
+            <div v-if="alertCart" class="alert alert-danger alert-cart" role="alert">
                 Your product card is empty, select the products to add to the card!
             </div>
         </div>
-        <!-- Navbar -->
-        <!-- Navbar -->
-        <div v-if="" class="container m-4" :style="{ opacity: opacity }">
+        <div v-if="" class="container" :style="{ opacity: opacity }">
             <!-- Carousel wrapper -->
-            <div id="carouselMaterialStyle" class="carousel slide carousel-fade"
-                 style="margin-top: 100px; height: 200px" data-mdb-ride="carousel">
+            <div id="carouselMaterialStyle" class="carousel slide carousel-fade carousel-add-clr"
+                 style="margin-top: 100px;" data-mdb-ride="carousel">
                 <!-- Indicators -->
                 <div class="carousel-indicators">
                     <button type="button" data-mdb-target="#carouselMaterialStyle" data-mdb-slide-to="0" class="active"
@@ -109,37 +93,22 @@
                 <div class="carousel-inner rounded-5 shadow-4-strong">
                     <!-- Single item -->
                     <div class="carousel-item active">
-                        <img src="../../../123.png" class="d-block" style="height: 200px"
-                             alt="Sunset Over the City"/>
+                        <img src="../../../123.png" class="d-block carousel-add-clr" alt="Sunset Over the City"/>
                         <div class="carousel-caption d-none d-md-block">
                         </div>
                     </div>
 
                     <!-- Single item -->
                     <div class="carousel-item">
-                        <img src="../../../lm.png" class="d-block w-100" style="height: 200px"
-                             alt="Canyon at Nigh"/>
+                        <img src="../../../lm.png" class="d-block w-100 carousel-add-clr" alt="Canyon at Nigh"/>
                         <div class="carousel-caption d-none d-md-block">
                         </div>
                     </div>
                 </div>
-                <!-- Inner -->
-
-                <!-- Controls -->
-                <button class="carousel-control-prev" type="button" data-mdb-target="#carouselMaterialStyle"
-                        data-mdb-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-mdb-target="#carouselMaterialStyle"
-                        data-mdb-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
             </div>
             <!-- Carousel wrapper -->
 
-            <div class="container py-5">
+            <div class="container py-5 py-5-add-clr">
                 <div class="row">
                     <div v-for="product in products"
                          class="col-md-6 col-lg-3 mb-4 pb-4 align-items-center justify-content-center">
@@ -196,9 +165,9 @@
         <!--            <section style="background-color: #eee;">-->
 
         <div v-if="showCart == true && cart !== undefined && order !== undefined"
-             class="shopping-cart scroll float-right hover-overlay" style="margin-top: 67px">
+             class="shopping-cart scroll float-right hover-overlay" style="margin-top: 65px">
             <button @click="hideCart" class="btn-close" aria-label="close icon"
-                    style="left: 100%;position: sticky;"></button>
+                    style="left: 100%; position: sticky;"></button>
 
             <h5 class="card-title text-md-center mb-3">Card</h5>
             <div v-if="payload" v-for="lineItem in payload.line_items" class="card mb-1 vh-25">
@@ -206,14 +175,14 @@
                     <button @click="deleteItem(lineItem.product_id)" type="button" class="btn-close" aria-label="Close"
                             style="left: 100%;position: sticky;"></button>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6 data-cart-add-clr">
                             <h5 class="card-title">{{ lineItem.product_name }}</h5>
                             <p class="card-text">{{ lineItem.description }}</p>
                             <p class="card-text">Quantity: {{ lineItem.quantity }}</p>
                             <p class="card-text">Price: {{ lineItem.price.totalPrice }}</p>
                             <p class="card-text">Total: {{ lineItem.quantity * lineItem.price.totalPrice }}</p>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 photo-cart-add-clr">
                             <img :src="lineItem.photo"
                                  class="img-fluid" alt="Product Photo" style="">
                         </div>
@@ -223,63 +192,18 @@
             <div v-if="price !== undefined" class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title">Cart Summary</h5>
-                    <!--                    <h6 class="card-subtitle mb-2 text-muted">Gross Price: {{ price.grossPrice }}</h6>-->
+                    <!-- <h6 class="card-subtitle mb-2 text-muted">Gross Price: {{ price.grossPrice }}</h6>-->
                     <h6 class="card-subtitle mb-2 text-muted">Tax: {{ price.tax }}</h6>
                     <h2 class="card-title">Total Price: {{ cart.price }}</h2>
                     <button class="btn btn-primary" @click="addToCart(product)">Check Out</button>
                 </div>
             </div>
         </div>
-
-
-        <!-- Footer -->
-<!--        <footer class="bg-primary text-center text-white fi">-->
-<!--            &lt;!&ndash; Grid container &ndash;&gt;-->
-<!--            <div class="container p-4 pb-0">-->
-<!--                &lt;!&ndash; Section: Social media &ndash;&gt;-->
-<!--                <section class="mb-4">-->
-<!--                    &lt;!&ndash; Facebook &ndash;&gt;-->
-<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
-<!--                        class="fab fa-facebook-f"></i></a>-->
-
-<!--                    &lt;!&ndash; Twitter &ndash;&gt;-->
-<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
-<!--                        class="fab fa-twitter"></i></a>-->
-
-<!--                    &lt;!&ndash; Google &ndash;&gt;-->
-<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
-<!--                        class="fab fa-google"></i></a>-->
-
-<!--                    &lt;!&ndash; Instagram &ndash;&gt;-->
-<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
-<!--                        class="fab fa-instagram"></i></a>-->
-
-<!--                    &lt;!&ndash; Linkedin &ndash;&gt;-->
-<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
-<!--                        class="fab fa-linkedin-in"></i></a>-->
-
-<!--                    &lt;!&ndash; Github &ndash;&gt;-->
-<!--                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i-->
-<!--                        class="fab fa-github"></i></a>-->
-<!--                </section>-->
-<!--                &lt;!&ndash; Section: Social media &ndash;&gt;-->
-<!--            </div>-->
-<!--            &lt;!&ndash; Grid container &ndash;&gt;-->
-
-<!--            &lt;!&ndash; Copyright &ndash;&gt;-->
-<!--            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">-->
-<!--                © 2020 Copyright:-->
-<!--                <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; Copyright &ndash;&gt;-->
-<!--        </footer>-->
-        <!-- Footer -->
     </div>
 </template>
 
 
 <script>
-import {array} from "../../../public/frontend_admin/src/js/mdb/util";
 
 export default {
     props: {
@@ -412,7 +336,7 @@ export default {
         logOut() {
             axios.post('/logout')
                 .then(response => {
-                    window.location.href = '/product/page';
+                    window.location.href = '/';
                 })
                 .catch(error => {
                     console.log(error);
@@ -430,15 +354,6 @@ export default {
 }
 </script>
 <style>
-@media (max-width: 600px) {
-    .shopping-cart {
-        width: 100%;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        border-radius: 0;
-    }
-}
 .heightPhoto {
     height: 167px;
     display: flex;
@@ -468,10 +383,84 @@ export default {
     overflow-y: scroll; /* enable vertical scrolling */
 }
 
+.carousel-add-clr{
+    height: 200px
+}
+.alert-cart {
+    position: fixed;
+    right: inherit;
+    margin-top: 135px;
+}
+@media (max-width: 575px) {
+    .shopping-cart {
+        width: 100% !important;
+        top: 0 ;
+        left: 0 ;
+        bottom: 0 ;
+        border-radius: 0;
+        margin-top: 85px;
+    }
+    .carousel-add-clr{
+        height: 120px
+    }
+    .py-5-add-clr {
+        padding-top: 16px !important;
+    }
+    .nav-item {
+        flex: 0 0 auto;
+        margin-right: 1rem;
+    }
+    .scroll-list {
+        margin-top: 15px;
+        order: 999;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch; /* enables momentum scrolling on iOS */
+        white-space: nowrap;
+    }
+    .scroll-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .nav-bar-add-clr {
+        height: auto !important;
+    }
+    .container-add-clr {
+        padding-top: 15px;
+    }
+    .data-cart-add-clr{
+        width: 55%;
+    }
+    .photo-cart-add-clr{
+        width: 45%;
+        margin-top: 30px;
+    }
+    .heightPhoto {
+        height: 167px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .heightPhoto img {
+        max-height: 100%;
+        max-width: fit-content;
+        width: 60%;
+    }
+}
+.scroll-list li {
+    display: inline-block;
+    margin-right: 45px !important;
+    vertical-align: middle;
+}
+.scroll-list li:last-child {
+    margin-right: 0;
+}
+
 .fixed-top {
     position: fixed;
     top: 0;
     left: 30px; /* change this value to adjust the button's position */
     z-index: 9999; /* to ensure the button is always on top */
 }
+
 </style>

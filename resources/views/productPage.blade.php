@@ -24,9 +24,7 @@
 </head>
 <body>
 <div id="app">
-    <div class="container">
-        <product-page :categories="{{json_encode($categories)}}" category="{{$categoryName}}"></product-page>
-    </div>
+    <product-page :categories="{{json_encode($categories)}}" category="{{$categoryName}}"></product-page>
 </div>
 <script src="{{ asset('js/app.js') }}"></script>
 </body>

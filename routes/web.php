@@ -42,9 +42,6 @@ Route::get('admin/orders', [adminController::class, 'orders'])->name('admin.orde
 Route::get('admin/users', [adminController::class, 'users'])->name('admin.users')->middleware(Authenticate::class);
 Route::get('admin/sales', [adminController::class, 'sales'])->name('admin.sales')->middleware(Authenticate::class);
 
-
-
-
 Route::post('/api/cart', [checkOutProduct::class, 'addToCart'])->name('products.frontend');
 Route::get('/', [ProductPageController::class, 'productPage'])->name('product.page');
 Route::post('/api/products', [ProductPageController::class, 'productData']);

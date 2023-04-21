@@ -18,7 +18,7 @@ class CreateProduct extends Controller
             unset($category->updated_at);
             unset($category->visible);
         });
-        return view('createProduct', ['categories'=> $categories]);
+        return view('createProduct', ['categories'=> $categories, 'domain' => config('app.url')]);
     }
     public function createProduct(Request $request){
         $request->validate([

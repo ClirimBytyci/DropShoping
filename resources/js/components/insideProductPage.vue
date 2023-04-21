@@ -1,30 +1,46 @@
 <template>
     <div>
-<!--        <p>{{data}}</p><br>-->
-<!--        <p>Product title; {{name}}</p><br>-->
-<!--&lt;!&ndash;        <p>Product ID:{{ id }}</p><br>&ndash;&gt;-->
-<!--        <button type="submit" @click="checkOut(id)">-->
-<!--            Sent Id-->
-<!--        </button>-->
+        <header class="bg-gray-800 text-white flex items-center justify-between px-4 py-3 fixed top-0 left-0 w-full z-50">
+            <div class="flex items-center">
+                <img src="../../../Free_logo.svg.png" alt="Shop logo" class="h-8">
+            </div>
+            <div class="flex items-center">
+                <a class="text-reset me-3 hidden-arrow inline-flex items-center" role="button" aria-expanded="false">
+                    <i class="fas fa-bell text-white"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                    </svg>
+                    <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-500 text-white" style="height: 24px; margin-bottom: 17px; margin-left: -10px;">0</span>
+                </a>
+
+                <button @click="goBack" class="bg-gray-700 hover:bg-gray-900 text-white rounded-full px-4 py-2 mr-4">
+                    Back
+                </button>
+            </div>
+        </header>
+        <!--        <p>Product ID:{{ id }}</p><br>-->
+        <!--        <button type="submit" @click="checkOut(id)">-->
+        <!--            Sent Id-->
+        <!--        </button>-->
         <div>
             <section class="py-12 sm:py-16">
                 <div class="container mx-auto px-4">
-<!---->
+                    <!---->
 
                     <div class="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
                         <div class="lg:col-span-3 lg:row-end-1">
                             <div class="lg:flex lg:items-start boxShadow">
-                                <div class="lg:order-2 lg:ml-5">
-                                    <div class="max-w-xl overflow-hidden rounded-lg">
-                                        <img class="h-full w-full max-w-full object-cover" :src="photoCover" alt="" />
+                                <div class="lg:order-2 lg:ml-5" style="margin: auto">
+                                    <div class="max-w-xl overflow-hidden rounded-lg" style="height: 480px; display: flex; justify-content: center; align-items: center;">
+                                        <img style="max-height: 100%; max-width: fit-content; width: -webkit-fill-available;" :src="photoCover" alt="" />
                                     </div>
                                 </div>
                                 <div class="mt-2 w-auto lg:order-1 lg:w-32 lg:flex-shrink-0">
                                     <div class="flex flex-row items-start lg:flex-col">
-                                        <button @click="changePhoto(data.url_main)" style="box-shadow: 2px 3px 14px gainsboro;" type="button" class="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg text-center">
-                                            <img class="h-full w-full object-cover" :src="data.url_main" alt="" />
+                                        <button @click="changePhoto(data.media.url_main)" style="box-shadow: 2px 3px 14px gainsboro;" type="button" class="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg text-center">
+                                            <img class="h-full w-full object-cover" :src="data.media.url_main" alt="" />
                                         </button>
-                                        <button v-for="photo in data.url_additional" type="button" style="box-shadow: 2px 3px 14px gainsboro;" class="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-transparent text-center">
+                                        <button v-for="photo in data.media.url_additional" type="button" style="box-shadow: 2px 3px 14px gainsboro;" class="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-transparent text-center">
                                             <img @click="changePhoto(photo)" class="h-full w-full object-cover" :src="photo" alt="" />
                                         </button>
 
@@ -98,7 +114,7 @@
                                     <span class="text-base">/month</span>
                                 </div>
 
-                                <button type="button" class="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800">
+                                <button @click="addToCart(data)" type="button" class="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="shrink-0 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                     </svg>
@@ -155,13 +171,109 @@ export default {
     ],
     data(){
         return {
-            photoCover: this.data.url_main
+            photoCover: this.data.media.url_main,
+            products: [],
+            cart: [],
+            order: [],
+            payload: [],
+            price: [],
+            showCart: false,
+            opacity: 1,
+            notificationCart: 1,
+            alertCart: false,
+            isLogin: this.isLogin,
+            name: '',
+            img: '',
+            account : [],
         }
     },
 
+
+    // mounted() {
+    //     this.refreshCart();
+    // },
+
     methods: {
-        changePhoto(urlPhoto){
+        changePhoto(urlPhoto) {
             this.photoCover = urlPhoto;
+        },
+
+        addToCart(product) {
+            axios.post(`/api/cart`, {
+                product: product,
+                _token: document.querySelector('meta[name="csrf-token-inside-product-page"]').getAttribute('content')
+            })
+                .then(response => {
+                    this.showCart = true;
+                    this.refreshCart();
+                    this.opacity = 0.5
+                    this.notificationCart = 1;
+                })
+                .catch(error => {
+                    console.error('Error adding to cart:', error)
+                })
+        },
+
+        // deleteItem(lineItemId) {
+        //     axios.delete(`/api/delete/${lineItemId}`,
+        //         {
+        //             _token: document.querySelector('meta[name="csrf-token-inside-product-page"]').getAttribute('content')
+        //         })
+        //         .then(() => {
+        //             this.refreshCart();
+        //         })
+        //         .catch(error => {
+        //             console.error('Error deleting item:', error);
+        //         });
+        // },
+        //
+        // refreshCart() {
+        //     axios.post('/api/products', {
+        //         _token: document.querySelector('meta[name="csrf-token-inside-product-page"]').getAttribute('content')
+        //     })
+        //         .then(response => {
+        //             this.products = response.data.products;
+        //             this.isLogin = response.data.account.isLogin;
+        //             this.name = response.data.account.name;
+        //             this.img = response.data.account.url;
+        //             this.cart = response.data.cart.cart;
+        //             this.payload = response.data.cart.payload;
+        //             this.order = response.data.cart.order;
+        //             this.price = response.data.cart.price;
+        //             this.account = response.data.account
+        //             if (this.cart == null) {
+        //                 this.opacity = 1;
+        //                 this.notificationCart = 0;
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.log(error);
+        //         });
+        // },
+        //
+        // hideCart() {
+        //     this.refreshCart();
+        //     this.showCart = false;
+        //     this.opacity = 1
+        // },
+        // clickCart() {
+        //     if (this.showCart == false && this.cart !== undefined) {
+        //         this.showCart = true;
+        //         this.opacity = 0.5;
+        //     } else {
+        //         this.showCart = false;
+        //         this.opacity = 1;
+        //     }
+        //     if (this.cart == null) {
+        //         this.alertCart = true;
+        //         setTimeout(() => {
+        //             this.alertCart = false;
+        //         }, 5000);
+        //     }
+        // },
+
+        goBack(){
+            window.history.back();
         }
     }
 
@@ -173,5 +285,29 @@ export default {
     border-radius: 45px;
     box-shadow: 2px 3px 14px gainsboro;
     height: 520px;
+}
+.shopping-cart {
+    opacity: 1;
+    width: 24%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #d5c7c7;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 3%;
+}
+
+.scroll {
+    max-height: 90%; /* set a maximum height for the cart */
+    overflow-y: scroll; /* enable vertical scrolling */
+}
+
+.fixed-top {
+    position: fixed;
+    top: 0;
+    left: 30px; /* change this value to adjust the button's position */
+    z-index: 9999; /* to ensure the button is always on top */
 }
 </style>

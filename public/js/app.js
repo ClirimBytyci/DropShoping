@@ -5399,12 +5399,103 @@ __webpack_require__.r(__webpack_exports__);
   props: ['data'],
   data: function data() {
     return {
-      photoCover: this.data.url_main
+      photoCover: this.data.media.url_main,
+      products: [],
+      cart: [],
+      order: [],
+      payload: [],
+      price: [],
+      showCart: false,
+      opacity: 1,
+      notificationCart: 1,
+      alertCart: false,
+      isLogin: this.isLogin,
+      name: '',
+      img: '',
+      account: []
     };
   },
+  // mounted() {
+  //     this.refreshCart();
+  // },
+
   methods: {
     changePhoto: function changePhoto(urlPhoto) {
       this.photoCover = urlPhoto;
+    },
+    addToCart: function addToCart(product) {
+      var _this = this;
+      axios.post("/api/cart", {
+        product: product,
+        _token: document.querySelector('meta[name="csrf-token-inside-product-page"]').getAttribute('content')
+      }).then(function (response) {
+        _this.showCart = true;
+        _this.refreshCart();
+        _this.opacity = 0.5;
+        _this.notificationCart = 1;
+      })["catch"](function (error) {
+        console.error('Error adding to cart:', error);
+      });
+    },
+    // deleteItem(lineItemId) {
+    //     axios.delete(`/api/delete/${lineItemId}`,
+    //         {
+    //             _token: document.querySelector('meta[name="csrf-token-inside-product-page"]').getAttribute('content')
+    //         })
+    //         .then(() => {
+    //             this.refreshCart();
+    //         })
+    //         .catch(error => {
+    //             console.error('Error deleting item:', error);
+    //         });
+    // },
+    //
+    // refreshCart() {
+    //     axios.post('/api/products', {
+    //         _token: document.querySelector('meta[name="csrf-token-inside-product-page"]').getAttribute('content')
+    //     })
+    //         .then(response => {
+    //             this.products = response.data.products;
+    //             this.isLogin = response.data.account.isLogin;
+    //             this.name = response.data.account.name;
+    //             this.img = response.data.account.url;
+    //             this.cart = response.data.cart.cart;
+    //             this.payload = response.data.cart.payload;
+    //             this.order = response.data.cart.order;
+    //             this.price = response.data.cart.price;
+    //             this.account = response.data.account
+    //             if (this.cart == null) {
+    //                 this.opacity = 1;
+    //                 this.notificationCart = 0;
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //         });
+    // },
+    //
+    // hideCart() {
+    //     this.refreshCart();
+    //     this.showCart = false;
+    //     this.opacity = 1
+    // },
+    // clickCart() {
+    //     if (this.showCart == false && this.cart !== undefined) {
+    //         this.showCart = true;
+    //         this.opacity = 0.5;
+    //     } else {
+    //         this.showCart = false;
+    //         this.opacity = 1;
+    //     }
+    //     if (this.cart == null) {
+    //         this.alertCart = true;
+    //         setTimeout(() => {
+    //             this.alertCart = false;
+    //         }, 5000);
+    //     }
+    // },
+    goBack: function goBack() {
+      window.history.back();
     }
   }
 });
@@ -5422,8 +5513,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _public_frontend_admin_src_js_mdb_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../public/frontend_admin/src/js/mdb/util */ "./public/frontend_admin/src/js/mdb/util/index.js");
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     categories: {
@@ -5542,7 +5631,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     logOut: function logOut() {
       axios.post('/logout').then(function (response) {
-        window.location.href = '/product/page';
+        window.location.href = '/';
       })["catch"](function (error) {
         console.log(error);
       });
@@ -5934,7 +6023,44 @@ __webpack_require__.r(__webpack_exports__);
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", [_c("div", [_c("section", {
+  return _c("div", [_c("header", {
+    staticClass: "bg-gray-800 text-white flex items-center justify-between px-4 py-3 fixed top-0 left-0 w-full z-50"
+  }, [_vm._m(0), _vm._v(" "), _c("div", {
+    staticClass: "flex items-center"
+  }, [_c("a", {
+    staticClass: "text-reset me-3 hidden-arrow inline-flex items-center",
+    attrs: {
+      role: "button",
+      "aria-expanded": "false"
+    }
+  }, [_c("i", {
+    staticClass: "fas fa-bell text-white"
+  }), _vm._v(" "), _c("svg", {
+    staticClass: "bi bi-cart",
+    attrs: {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: "25",
+      height: "25",
+      fill: "currentColor",
+      viewBox: "0 0 16 16"
+    }
+  }, [_c("path", {
+    attrs: {
+      d: "M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+    }
+  })]), _vm._v(" "), _c("span", {
+    staticClass: "inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-500 text-white",
+    staticStyle: {
+      height: "24px",
+      "margin-bottom": "17px",
+      "margin-left": "-10px"
+    }
+  }, [_vm._v("0")])]), _vm._v(" "), _c("button", {
+    staticClass: "bg-gray-700 hover:bg-gray-900 text-white rounded-full px-4 py-2 mr-4",
+    on: {
+      click: _vm.goBack
+    }
+  }, [_vm._v("\n                Back\n            ")])])]), _vm._v(" "), _c("div", [_c("section", {
     staticClass: "py-12 sm:py-16"
   }, [_c("div", {
     staticClass: "container mx-auto px-4"
@@ -5945,11 +6071,24 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "lg:flex lg:items-start boxShadow"
   }, [_c("div", {
-    staticClass: "lg:order-2 lg:ml-5"
+    staticClass: "lg:order-2 lg:ml-5",
+    staticStyle: {
+      margin: "auto"
+    }
   }, [_c("div", {
-    staticClass: "max-w-xl overflow-hidden rounded-lg"
+    staticClass: "max-w-xl overflow-hidden rounded-lg",
+    staticStyle: {
+      height: "480px",
+      display: "flex",
+      "justify-content": "center",
+      "align-items": "center"
+    }
   }, [_c("img", {
-    staticClass: "h-full w-full max-w-full object-cover",
+    staticStyle: {
+      "max-height": "100%",
+      "max-width": "fit-content",
+      width: "-webkit-fill-available"
+    },
     attrs: {
       src: _vm.photoCover,
       alt: ""
@@ -5968,16 +6107,16 @@ var render = function render() {
     },
     on: {
       click: function click($event) {
-        return _vm.changePhoto(_vm.data.url_main);
+        return _vm.changePhoto(_vm.data.media.url_main);
       }
     }
   }, [_c("img", {
     staticClass: "h-full w-full object-cover",
     attrs: {
-      src: _vm.data.url_main,
+      src: _vm.data.media.url_main,
       alt: ""
     }
-  })]), _vm._v(" "), _vm._l(_vm.data.url_additional, function (photo) {
+  })]), _vm._v(" "), _vm._l(_vm.data.media.url_additional, function (photo) {
     return _c("button", {
       staticClass: "flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-transparent text-center",
       staticStyle: {
@@ -6065,9 +6204,9 @@ var render = function render() {
     staticClass: "ml-2 text-sm font-medium text-gray-500"
   }, [_vm._v("1,209 Reviews")])]), _vm._v(" "), _c("h2", {
     staticClass: "mt-8 text-base text-gray-900"
-  }, [_vm._v("Coffee Type")]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c("h2", {
+  }, [_vm._v("Coffee Type")]), _vm._v(" "), _vm._m(1), _vm._v(" "), _c("h2", {
     staticClass: "mt-8 text-base text-gray-900"
-  }, [_vm._v("Choose subscription")]), _vm._v(" "), _vm._m(1), _vm._v(" "), _c("div", {
+  }, [_vm._v("Choose subscription")]), _vm._v(" "), _vm._m(2), _vm._v(" "), _c("div", {
     staticClass: "mt-10 flex flex-col items-center justify-between space-y-4 border-t border-b py-4 sm:flex-row sm:space-y-0"
   }, [_c("div", {
     staticClass: "flex items-end"
@@ -6079,6 +6218,11 @@ var render = function render() {
     staticClass: "inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800",
     attrs: {
       type: "button"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.addToCart(_vm.data);
+      }
     }
   }, [_c("svg", {
     staticClass: "shrink-0 mr-3 h-5 w-5",
@@ -6095,7 +6239,7 @@ var render = function render() {
       "stroke-linejoin": "round",
       d: "M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
     }
-  })]), _vm._v("\n                                    Add to cart\n                                ")])]), _vm._v(" "), _c("ul", {
+  })]), _vm._v("\n                                Add to cart\n                            ")])]), _vm._v(" "), _c("ul", {
     staticClass: "mt-8 space-y-2"
   }, [_c("li", {
     staticClass: "flex items-center text-left text-sm font-medium text-gray-600"
@@ -6114,7 +6258,7 @@ var render = function render() {
       "stroke-width": "2",
       d: "M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
     }
-  })]), _vm._v("\n                                    Free shipping worldwide\n                                ")]), _vm._v(" "), _c("li", {
+  })]), _vm._v("\n                                Free shipping worldwide\n                            ")]), _vm._v(" "), _c("li", {
     staticClass: "flex items-center text-left text-sm font-medium text-gray-600"
   }, [_c("svg", {
     staticClass: "mr-2 block h-5 w-5 align-middle text-gray-500",
@@ -6131,9 +6275,9 @@ var render = function render() {
       "stroke-width": "2",
       d: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
     }
-  })]), _vm._v("\n                                    Cancel Anytime\n                                ")])])]), _vm._v(" "), _c("div", {
+  })]), _vm._v("\n                                Cancel Anytime\n                            ")])])]), _vm._v(" "), _c("div", {
     staticClass: "lg:col-span-3"
-  }, [_vm._m(2), _vm._v(" "), _c("div", {
+  }, [_vm._m(3), _vm._v(" "), _c("div", {
     staticClass: "mt-8 flow-root sm:mt-12"
   }, [_c("h1", {
     staticClass: "mt-8 text-3xl font-bold"
@@ -6142,6 +6286,18 @@ var render = function render() {
   }, [_vm._v(_vm._s(_vm.data.description))])])])])])])])]);
 };
 var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "flex items-center"
+  }, [_c("img", {
+    staticClass: "h-8",
+    attrs: {
+      src: __webpack_require__(/*! ../../../Free_logo.svg.png */ "./Free_logo.svg.png"),
+      alt: "Shop logo"
+    }
+  })]);
+}, function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
@@ -6234,7 +6390,7 @@ var staticRenderFns = [function () {
       href: "#",
       title: ""
     }
-  }, [_vm._v("\n                                        Reviews\n                                        "), _c("span", {
+  }, [_vm._v("\n                                    Reviews\n                                    "), _c("span", {
     staticClass: "ml-2 block rounded-full bg-gray-500 px-2 py-px text-xs font-bold text-gray-100"
   }, [_vm._v(" 1,209 ")])])])]);
 }];
@@ -6258,15 +6414,17 @@ __webpack_require__.r(__webpack_exports__);
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", [_c("div", {
-    staticClass: "navbar navbar-expand-lg navbar-dark fixed-top bg-light m-0 p-0",
+  return _c("div", {
+    staticClass: "container container-add-clr"
+  }, [_c("div", {
+    staticClass: "navbar navbar-expand-lg navbar-dark fixed-top bg-light m-0 p-0 nav-bar-add-clr",
     staticStyle: {
       left: "0",
       height: "65px"
     }
   }, [_c("div", {
     staticClass: "container-fluid"
-  }, [_c("a", {
+  }, [_c("div", [_c("a", {
     staticClass: "navbar-brand m-0 mt-lg-0",
     staticStyle: {
       cursor: "pointer"
@@ -6276,16 +6434,13 @@ var render = function render() {
     }
   }, [_c("img", {
     attrs: {
-      height: "80px",
-      src: __webpack_require__(/*! ../../../2023-03-22_22-33.png */ "./2023-03-22_22-33.png")
+      height: "40px",
+      src: __webpack_require__(/*! ../../../Free_logo.svg.png */ "./Free_logo.svg.png")
     }
-  })]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c("div", {
-    staticClass: "collapse navbar-collapse",
-    attrs: {
-      id: "navbarSupportedContent"
-    }
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "scroll-list"
   }, [_c("ul", {
-    staticClass: "navbar-nav me-auto mb-2 mb-lg-0"
+    staticClass: "me-auto mb-2 mb-lg-0"
   }, _vm._l(_vm.categories, function (category) {
     return _c("li", {
       key: category.id,
@@ -6294,7 +6449,6 @@ var render = function render() {
         cursor: "pointer"
       }
     }, [_c("a", {
-      staticClass: "nav-link text-dark",
       attrs: {
         id: category.id
       },
@@ -6304,7 +6458,7 @@ var render = function render() {
         }
       }
     }, [_vm._v(_vm._s(category.name))])]);
-  }), 0), _vm._v(" "), _vm._m(1), _vm._v(" "), _c("div", {
+  }), 0)]), _vm._v(" "), _c("div", {
     staticClass: "d-flex align-items-center justify-content-start"
   }, [_c("div", {
     staticClass: "dropdown"
@@ -6391,7 +6545,7 @@ var render = function render() {
     on: {
       click: _vm.logOut
     }
-  }, [_vm._v("\n                                        LogOut\n                                    ")])]) : _c("li", [_c("a", {
+  }, [_vm._v("\n                                    LogOut\n                                ")])]) : _c("li", [_c("a", {
     staticClass: "dropdown-item",
     attrs: {
       href: "#"
@@ -6399,7 +6553,7 @@ var render = function render() {
     on: {
       click: _vm.logIn
     }
-  }, [_vm._v("\n                                        LogIn\n                                    ")]), _vm._v(" "), _c("a", {
+  }, [_vm._v("\n                                    LogIn\n                                ")]), _vm._v(" "), _c("a", {
     staticClass: "dropdown-item",
     attrs: {
       href: "#"
@@ -6407,30 +6561,18 @@ var render = function render() {
     on: {
       click: _vm.register
     }
-  }, [_vm._v("\n                                        Register\n                                    ")])])])])])]), _vm._v(" "), _vm.name ? _c("label", {
-    staticStyle: {
-      margin: "auto 0.5%"
-    },
-    attrs: {
-      "for": "navbarDropdownMenuAvatar"
-    }
-  }, [_vm._v(_vm._s(_vm.name))]) : _vm._e()]), _vm._v(" "), _vm.alertCart ? _c("div", {
-    staticClass: "alert alert-danger",
-    staticStyle: {
-      position: "fixed",
-      right: "inherit",
-      top: "66px"
-    },
+  }, [_vm._v("\n                                    Register\n                                ")])])])])])]), _vm._v(" "), _vm.alertCart ? _c("div", {
+    staticClass: "alert alert-danger alert-cart",
     attrs: {
       role: "alert"
     }
   }, [_vm._v("\n                Your product card is empty, select the products to add to the card!\n            ")]) : _vm._e()]), _vm._v(" "), _c("div", {
-    staticClass: "container m-4",
+    staticClass: "container",
     style: {
       opacity: _vm.opacity
     }
-  }, [_vm._m(2), _vm._v(" "), _c("div", {
-    staticClass: "container py-5"
+  }, [_vm._m(0), _vm._v(" "), _c("div", {
+    staticClass: "container py-5 py-5-add-clr"
   }, [_c("div", {
     staticClass: "row"
   }, _vm._l(_vm.products, function (product) {
@@ -6438,7 +6580,7 @@ var render = function render() {
       staticClass: "col-md-6 col-lg-3 mb-4 pb-4 align-items-center justify-content-center"
     }, [_c("div", {
       staticClass: "card shadow-lg"
-    }, [_vm._m(3, true), _vm._v(" "), _c("div", {
+    }, [_vm._m(1, true), _vm._v(" "), _c("div", {
       staticClass: "heightPhoto"
     }, [_c("img", {
       staticClass: "card-img-top p-3",
@@ -6492,7 +6634,7 @@ var render = function render() {
       staticClass: "text-muted mb-0"
     }, [_vm._v("Available: "), _c("span", {
       staticClass: "fw-bold"
-    }, [_vm._v(_vm._s(Math.floor(product.stock)))])]), _vm._v(" "), _vm._m(4, true)])]), _vm._v(" "), _c("button", {
+    }, [_vm._v(_vm._s(Math.floor(product.stock)))])]), _vm._v(" "), _vm._m(2, true)])]), _vm._v(" "), _c("button", {
       staticClass: "btn btn-success btn-lg",
       attrs: {
         type: "button"
@@ -6506,7 +6648,7 @@ var render = function render() {
   }), 0)])]), _vm._v(" "), _vm.showCart == true && _vm.cart !== undefined && _vm.order !== undefined ? _c("div", {
     staticClass: "shopping-cart scroll float-right hover-overlay",
     staticStyle: {
-      "margin-top": "67px"
+      "margin-top": "65px"
     }
   }, [_c("button", {
     staticClass: "btn-close",
@@ -6545,7 +6687,7 @@ var render = function render() {
     }), _vm._v(" "), _c("div", {
       staticClass: "row"
     }, [_c("div", {
-      staticClass: "col-md-6"
+      staticClass: "col-md-6 data-cart-add-clr"
     }, [_c("h5", {
       staticClass: "card-title"
     }, [_vm._v(_vm._s(lineItem.product_name))]), _vm._v(" "), _c("p", {
@@ -6557,7 +6699,7 @@ var render = function render() {
     }, [_vm._v("Price: " + _vm._s(lineItem.price.totalPrice))]), _vm._v(" "), _c("p", {
       staticClass: "card-text"
     }, [_vm._v("Total: " + _vm._s(lineItem.quantity * lineItem.price.totalPrice))])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-6"
+      staticClass: "col-md-6 photo-cart-add-clr"
     }, [_c("img", {
       staticClass: "img-fluid",
       attrs: {
@@ -6587,48 +6729,10 @@ var render = function render() {
 var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("button", {
-    staticClass: "navbar-toggler",
-    attrs: {
-      type: "button",
-      "data-mdb-toggle": "collapse",
-      "data-mdb-target": "#navbarSupportedContent",
-      "aria-controls": "navbarSupportedContent",
-      "aria-expanded": "false",
-      "aria-label": "Toggle navigation"
-    }
-  }, [_c("i", {
-    staticClass: "fas fa-bars"
-  })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
   return _c("div", {
-    staticClass: "input-group rounded w-25"
-  }, [_c("input", {
-    staticClass: "form-control rounded",
-    attrs: {
-      type: "search",
-      placeholder: "Search",
-      "aria-label": "Search",
-      "aria-describedby": "search-addon"
-    }
-  }), _vm._v(" "), _c("span", {
-    staticClass: "input-group-text border-0",
-    attrs: {
-      id: "search-addon"
-    }
-  }, [_c("i", {
-    staticClass: "fas fa-search"
-  })])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "carousel slide carousel-fade",
+    staticClass: "carousel slide carousel-fade carousel-add-clr",
     staticStyle: {
-      "margin-top": "100px",
-      height: "200px"
+      "margin-top": "100px"
     },
     attrs: {
       id: "carouselMaterialStyle",
@@ -6657,10 +6761,7 @@ var staticRenderFns = [function () {
   }, [_c("div", {
     staticClass: "carousel-item active"
   }, [_c("img", {
-    staticClass: "d-block",
-    staticStyle: {
-      height: "200px"
-    },
+    staticClass: "d-block carousel-add-clr",
     attrs: {
       src: __webpack_require__(/*! ../../../123.png */ "./123.png"),
       alt: "Sunset Over the City"
@@ -6670,45 +6771,14 @@ var staticRenderFns = [function () {
   })]), _vm._v(" "), _c("div", {
     staticClass: "carousel-item"
   }, [_c("img", {
-    staticClass: "d-block w-100",
-    staticStyle: {
-      height: "200px"
-    },
+    staticClass: "d-block w-100 carousel-add-clr",
     attrs: {
       src: __webpack_require__(/*! ../../../lm.png */ "./lm.png"),
       alt: "Canyon at Nigh"
     }
   }), _vm._v(" "), _c("div", {
     staticClass: "carousel-caption d-none d-md-block"
-  })])]), _vm._v(" "), _c("button", {
-    staticClass: "carousel-control-prev",
-    attrs: {
-      type: "button",
-      "data-mdb-target": "#carouselMaterialStyle",
-      "data-mdb-slide": "prev"
-    }
-  }, [_c("span", {
-    staticClass: "carousel-control-prev-icon",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  }), _vm._v(" "), _c("span", {
-    staticClass: "visually-hidden"
-  }, [_vm._v("Previous")])]), _vm._v(" "), _c("button", {
-    staticClass: "carousel-control-next",
-    attrs: {
-      type: "button",
-      "data-mdb-target": "#carouselMaterialStyle",
-      "data-mdb-slide": "next"
-    }
-  }, [_c("span", {
-    staticClass: "carousel-control-next-icon",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  }), _vm._v(" "), _c("span", {
-    staticClass: "visually-hidden"
-  }, [_vm._v("Next")])])]);
+  })])])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -6743,216 +6813,6 @@ var staticRenderFns = [function () {
   })]);
 }];
 render._withStripped = true;
-
-
-/***/ }),
-
-/***/ "./public/frontend_admin/src/js/mdb/util/index.js":
-/*!********************************************************!*\
-  !*** ./public/frontend_admin/src/js/mdb/util/index.js ***!
-  \********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "TRANSITION_END": () => (/* binding */ TRANSITION_END),
-/* harmony export */   "array": () => (/* binding */ array),
-/* harmony export */   "defineJQueryPlugin": () => (/* binding */ defineJQueryPlugin),
-/* harmony export */   "element": () => (/* binding */ element),
-/* harmony export */   "emulateTransitionEnd": () => (/* binding */ emulateTransitionEnd),
-/* harmony export */   "findShadowRoot": () => (/* binding */ findShadowRoot),
-/* harmony export */   "getElementFromSelector": () => (/* binding */ getElementFromSelector),
-/* harmony export */   "getSelectorFromElement": () => (/* binding */ getSelectorFromElement),
-/* harmony export */   "getTransitionDurationFromElement": () => (/* binding */ getTransitionDurationFromElement),
-/* harmony export */   "getUID": () => (/* binding */ getUID),
-/* harmony export */   "getjQuery": () => (/* binding */ getjQuery),
-/* harmony export */   "isElement": () => (/* binding */ isElement),
-/* harmony export */   "isRTL": () => (/* binding */ isRTL),
-/* harmony export */   "isVisible": () => (/* binding */ isVisible),
-/* harmony export */   "noop": () => (/* binding */ noop),
-/* harmony export */   "onDOMContentLoaded": () => (/* binding */ onDOMContentLoaded),
-/* harmony export */   "reflow": () => (/* binding */ reflow),
-/* harmony export */   "triggerTransitionEnd": () => (/* binding */ triggerTransitionEnd),
-/* harmony export */   "typeCheckConfig": () => (/* binding */ typeCheckConfig)
-/* harmony export */ });
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.0.0-beta2): util/index.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-
-var MAX_UID = 1000000;
-var MILLISECONDS_MULTIPLIER = 1000;
-var TRANSITION_END = 'transitionend';
-
-// Shoutout AngusCroll (https://goo.gl/pxwQGp)
-var toType = function toType(obj) {
-  if (obj === null || obj === undefined) {
-    return "".concat(obj);
-  }
-  return {}.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase();
-};
-
-/**
- * --------------------------------------------------------------------------
- * Public Util Api
- * --------------------------------------------------------------------------
- */
-
-var getUID = function getUID(prefix) {
-  do {
-    prefix += Math.floor(Math.random() * MAX_UID);
-  } while (document.getElementById(prefix));
-  return prefix;
-};
-var getSelector = function getSelector(element) {
-  var selector = element.getAttribute('data-mdb-target');
-  if (!selector || selector === '#') {
-    var hrefAttr = element.getAttribute('href');
-    selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : null;
-  }
-  return selector;
-};
-var getSelectorFromElement = function getSelectorFromElement(element) {
-  var selector = getSelector(element);
-  if (selector) {
-    return document.querySelector(selector) ? selector : null;
-  }
-  return null;
-};
-var getElementFromSelector = function getElementFromSelector(element) {
-  var selector = getSelector(element);
-  return selector ? document.querySelector(selector) : null;
-};
-var getTransitionDurationFromElement = function getTransitionDurationFromElement(element) {
-  if (!element) {
-    return 0;
-  }
-
-  // Get transition-duration of the element
-  var _window$getComputedSt = window.getComputedStyle(element),
-    transitionDuration = _window$getComputedSt.transitionDuration,
-    transitionDelay = _window$getComputedSt.transitionDelay;
-  var floatTransitionDuration = Number.parseFloat(transitionDuration);
-  var floatTransitionDelay = Number.parseFloat(transitionDelay);
-
-  // Return 0 if element or transition duration is not found
-  if (!floatTransitionDuration && !floatTransitionDelay) {
-    return 0;
-  }
-
-  // If multiple durations are defined, take the first
-  transitionDuration = transitionDuration.split(',')[0];
-  transitionDelay = transitionDelay.split(',')[0];
-  return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
-};
-var triggerTransitionEnd = function triggerTransitionEnd(element) {
-  element.dispatchEvent(new Event(TRANSITION_END));
-};
-var isElement = function isElement(obj) {
-  return (obj[0] || obj).nodeType;
-};
-var emulateTransitionEnd = function emulateTransitionEnd(element, duration) {
-  var called = false;
-  var durationPadding = 5;
-  var emulatedDuration = duration + durationPadding;
-  function listener() {
-    called = true;
-    element.removeEventListener(TRANSITION_END, listener);
-  }
-  element.addEventListener(TRANSITION_END, listener);
-  setTimeout(function () {
-    if (!called) {
-      triggerTransitionEnd(element);
-    }
-  }, emulatedDuration);
-};
-var typeCheckConfig = function typeCheckConfig(componentName, config, configTypes) {
-  Object.keys(configTypes).forEach(function (property) {
-    var expectedTypes = configTypes[property];
-    var value = config[property];
-    var valueType = value && isElement(value) ? 'element' : toType(value);
-    if (!new RegExp(expectedTypes).test(valueType)) {
-      throw new Error("".concat(componentName.toUpperCase(), ": ") + "Option \"".concat(property, "\" provided type \"").concat(valueType, "\" ") + "but expected type \"".concat(expectedTypes, "\"."));
-    }
-  });
-};
-var isVisible = function isVisible(element) {
-  if (!element) {
-    return false;
-  }
-  if (element.style && element.parentNode && element.parentNode.style) {
-    var elementStyle = getComputedStyle(element);
-    var parentNodeStyle = getComputedStyle(element.parentNode);
-    return elementStyle.display !== 'none' && parentNodeStyle.display !== 'none' && elementStyle.visibility !== 'hidden';
-  }
-  return false;
-};
-var findShadowRoot = function findShadowRoot(element) {
-  if (!document.documentElement.attachShadow) {
-    return null;
-  }
-
-  // Can find the shadow root otherwise it'll return the document
-  if (typeof element.getRootNode === 'function') {
-    var root = element.getRootNode();
-    return root instanceof ShadowRoot ? root : null;
-  }
-  if (element instanceof ShadowRoot) {
-    return element;
-  }
-
-  // when we don't find a shadow root
-  if (!element.parentNode) {
-    return null;
-  }
-  return findShadowRoot(element.parentNode);
-};
-var noop = function noop() {
-  return function () {};
-};
-var reflow = function reflow(element) {
-  return element.offsetHeight;
-};
-var getjQuery = function getjQuery() {
-  var _window = window,
-    jQuery = _window.jQuery;
-  if (jQuery && !document.body.hasAttribute('data-mdb-no-jquery')) {
-    return jQuery;
-  }
-  return null;
-};
-var onDOMContentLoaded = function onDOMContentLoaded(callback) {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', callback);
-  } else {
-    callback();
-  }
-};
-var isRTL = document.documentElement.dir === 'rtl';
-var array = function array(collection) {
-  return Array.from(collection);
-};
-var element = function element(tag) {
-  return document.createElement(tag);
-};
-var defineJQueryPlugin = function defineJQueryPlugin(name, plugin) {
-  onDOMContentLoaded(function () {
-    var $ = getjQuery();
-    /* istanbul ignore if */
-    if ($) {
-      var JQUERY_NO_CONFLICT = $.fn[name];
-      $.fn[name] = plugin.jQueryInterface;
-      $.fn[name].Constructor = plugin;
-      $.fn[name].noConflict = function () {
-        $.fn[name] = JQUERY_NO_CONFLICT;
-        return plugin.jQueryInterface;
-      };
-    }
-  });
-};
 
 
 /***/ }),
@@ -12310,7 +12170,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.boxShadow {\n    padding: 16px;\n    border-radius: 45px;\n    box-shadow: 2px 3px 14px gainsboro;\n    height: 520px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.boxShadow {\n    padding: 16px;\n    border-radius: 45px;\n    box-shadow: 2px 3px 14px gainsboro;\n    height: 520px;\n}\n.shopping-cart {\n    opacity: 1;\n    width: 24%;\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background-color: #d5c7c7;\n    padding: 20px;\n    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n    border-radius: 3%;\n}\n.scroll {\n    max-height: 90%; /* set a maximum height for the cart */\n    overflow-y: scroll; /* enable vertical scrolling */\n}\n.fixed-top {\n    position: fixed;\n    top: 0;\n    left: 30px; /* change this value to adjust the button's position */\n    z-index: 9999; /* to ensure the button is always on top */\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12334,7 +12194,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n@media (max-width: 600px) {\n.shopping-cart {\n        width: 100%;\n        top: 0;\n        left: 0;\n        bottom: 0;\n        border-radius: 0;\n}\n}\n.heightPhoto {\n    height: 167px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.heightPhoto img {\n    max-height: 100%;\n    max-width: -moz-fit-content;\n    max-width: fit-content;\n}\n.shopping-cart {\n    opacity: 1;\n    width: 24%;\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background-color: #d5c7c7;\n    padding: 20px;\n    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n    border-radius: 3%;\n}\n.scroll {\n    max-height: 90%; /* set a maximum height for the cart */\n    overflow-y: scroll; /* enable vertical scrolling */\n}\n.fixed-top {\n    position: fixed;\n    top: 0;\n    left: 30px; /* change this value to adjust the button's position */\n    z-index: 9999; /* to ensure the button is always on top */\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.heightPhoto {\n    height: 167px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.heightPhoto img {\n    max-height: 100%;\n    max-width: -moz-fit-content;\n    max-width: fit-content;\n}\n.shopping-cart {\n    opacity: 1;\n    width: 24%;\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background-color: #d5c7c7;\n    padding: 20px;\n    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n    border-radius: 3%;\n}\n.scroll {\n    max-height: 90%; /* set a maximum height for the cart */\n    overflow-y: scroll; /* enable vertical scrolling */\n}\n.carousel-add-clr{\n    height: 200px\n}\n.alert-cart {\n    position: fixed;\n    right: inherit;\n    margin-top: 135px;\n}\n@media (max-width: 575px) {\n.shopping-cart {\n        width: 100% !important;\n        top: 0 ;\n        left: 0 ;\n        bottom: 0 ;\n        border-radius: 0;\n        margin-top: 85px;\n}\n.carousel-add-clr{\n        height: 120px\n}\n.py-5-add-clr {\n        padding-top: 16px !important;\n}\n.nav-item {\n        flex: 0 0 auto;\n        margin-right: 1rem;\n}\n.scroll-list {\n        margin-top: 15px;\n        order: 999;\n        overflow-x: scroll;\n        -webkit-overflow-scrolling: touch; /* enables momentum scrolling on iOS */\n        white-space: nowrap;\n}\n.scroll-list ul {\n        list-style: none;\n        padding: 0;\n        margin: 0;\n}\n.nav-bar-add-clr {\n        height: auto !important;\n}\n.container-add-clr {\n        padding-top: 15px;\n}\n.data-cart-add-clr{\n        width: 55%;\n}\n.photo-cart-add-clr{\n        width: 45%;\n        margin-top: 30px;\n}\n.heightPhoto {\n        height: 167px;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n}\n.heightPhoto img {\n        max-height: 100%;\n        max-width: -moz-fit-content;\n        max-width: fit-content;\n        width: 60%;\n}\n}\n.scroll-list li {\n    display: inline-block;\n    margin-right: 45px !important;\n    vertical-align: middle;\n}\n.scroll-list li:last-child {\n    margin-right: 0;\n}\n.fixed-top {\n    position: fixed;\n    top: 0;\n    left: 30px; /* change this value to adjust the button's position */\n    z-index: 9999; /* to ensure the button is always on top */\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12427,13 +12287,13 @@ module.exports = "/images/123.png?20e14ac3a39881c30b00b05d77052dc7";
 
 /***/ }),
 
-/***/ "./2023-03-22_22-33.png":
-/*!******************************!*\
-  !*** ./2023-03-22_22-33.png ***!
-  \******************************/
+/***/ "./Free_logo.svg.png":
+/*!***************************!*\
+  !*** ./Free_logo.svg.png ***!
+  \***************************/
 /***/ ((module) => {
 
-module.exports = "/images/2023-03-22_22-33.png?23920135fff1c754fe0c5035a64b097b";
+module.exports = "/images/Free_logo.svg.png?8ad4a8d6f2626dde79347099728da119";
 
 /***/ }),
 
@@ -42626,7 +42486,7 @@ Vue.compile = compileToFunctions;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
+module.exports = JSON.parse('{"_args":[["axios@0.21.4","/home/s25/Desktop/LaravelProject/DropShoping"]],"_development":true,"_from":"axios@0.21.4","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.21.4","name":"axios","escapedName":"axios","rawSpec":"0.21.4","saveSpec":null,"fetchSpec":"0.21.4"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_spec":"0.21.4","_where":"/home/s25/Desktop/LaravelProject/DropShoping","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
 
 /***/ })
 

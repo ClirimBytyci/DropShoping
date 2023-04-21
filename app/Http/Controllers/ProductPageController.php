@@ -124,8 +124,10 @@ class ProductPageController extends Controller
             'stock'=> $product['stock'],
             'tax_status'=> $product['tax_status'],
             'price'=> $product['price'],
-            'url_main'=> $product->media['url_main'],
-            'url_additional'=> json_decode($product->media['url_additional']),
+            'media'=> [
+                'url_main'=> $product->media['url_main'],
+                'url_additional'=> json_decode($product->media['url_additional']),
+            ],
             'id'=>$request->query->all()['id']
         ];
 

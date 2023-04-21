@@ -15,6 +15,9 @@
     }
 </style>
 <body class="container w-50 pt-5 mt-4">
+
+{{$domain}}
+
 @error('additionalPhotos')
 <div class="alert alert-danger">{{ $message }}</div>
 @enderror
