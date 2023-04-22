@@ -7,6 +7,7 @@ use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\AuthenticateMiddleware;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Domain;
 use App\Models\Media;
 use App\Models\Orders;
 use App\Models\Post;
@@ -90,9 +91,9 @@ Route::post('/api/save-data', function (Request $request) {
 })->middleware(Authenticate::class);
 
 Route::get('/test12', function (Request $request){
-    Category::create([
-        'name'=> 'Mobile',
-        'visible'=>true
+    Domain::create([
+        'domain'=> 'Mobile',
+        'active'=> 1
     ]);
 });
 

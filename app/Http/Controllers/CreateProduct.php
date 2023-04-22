@@ -24,14 +24,16 @@ class CreateProduct extends Controller
         $request->validate([
             'additionalPhotos' => 'array|max:4',
         ]);
+
+        $folder = 'images/product/';
         $data = $request->all();
         $imageName = time().'.'.$request->file('mainPhoto')->getClientOriginalName();
-        $request->mainPhoto->move(public_path('images/product'), $imageName);
+        $request->mainPhoto->move(public_path($folder), $imageName);
 
         $additionalPhoto = array();
         foreach ($request->file('additionalPhotos') as $photo){
-            $additionalPhoto[] = config('app.url').'/images/product/'.time().'.'.$photo->getClientOriginalName();
-            $photo->move(public_path('images/product'), time().'.'.$photo->getClientOriginalName());
+            $additionalPhoto[] = time().'.'.$photo->getClientOriginalName();
+            $photo->move(public_path($folder), time().'.'.$photo->getClientOriginalName());
         }
         $active = 0;
         if (isset($data['active']) && $data['active'] == 'on' ){
@@ -51,8 +53,8 @@ class CreateProduct extends Controller
 
         Media::create([
             'product_id'=> $product->id,
-            'user_id'=> null,
-            'url_main' => config('app.url').'/images/product/'.$imageName,
+            'folder'=> $folder,
+            'url_main' => $imageName,
             'url_additional' => json_encode($additionalPhoto),
         ]);
         return back();

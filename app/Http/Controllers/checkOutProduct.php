@@ -20,7 +20,8 @@ class checkOutProduct extends Controller
         $taxRate = 0.18;
         $quantity = 1;
         $orderNumber = 10000;
-        $photo = $product['media']['url_main'];
+
+        $photo = $product['media']['folder'].$product['media']['url_main'];
 
         $productEntity = Product::where('id', $productId)->first();
 

@@ -5537,15 +5537,14 @@ __webpack_require__.r(__webpack_exports__);
       alertCart: false,
       isLogin: this.isLogin,
       name: '',
-      img: '',
-      account: []
+      account: [],
+      domain: ''
     };
   },
   mounted: function mounted() {
     this.refreshCart();
   },
   created: function created() {
-    console.log(this.category);
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   },
   methods: {
@@ -5582,12 +5581,13 @@ __webpack_require__.r(__webpack_exports__);
         _this3.products = response.data.products;
         _this3.isLogin = response.data.account.isLogin;
         _this3.name = response.data.account.name;
-        _this3.img = response.data.account.url;
         _this3.cart = response.data.cart.cart;
         _this3.payload = response.data.cart.payload;
         _this3.order = response.data.cart.order;
         _this3.price = response.data.cart.price;
         _this3.account = response.data.account;
+        _this3.domain = response.data.domain;
+        console.log(_this3.domain);
         if (_this3.cart == null) {
           _this3.opacity = 1;
           _this3.notificationCart = 0;
@@ -6505,10 +6505,10 @@ var render = function render() {
       "data-mdb-toggle": "dropdown",
       "aria-expanded": "false"
     }
-  }, [_vm.isLogin && _vm.img ? _c("img", {
+  }, [_vm.isLogin ? _c("img", {
     staticClass: "rounded-circle",
     attrs: {
-      src: _vm.img,
+      src: "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-unknown-social-media-user-photo-default-avatar-profile-icon-vector-unknown-social-media-user-184816085.jpg",
       height: "40px",
       alt: "Black and White Portrait of a Man",
       loading: "lazy"
@@ -6588,7 +6588,7 @@ var render = function render() {
         cursor: "pointer"
       },
       attrs: {
-        src: product.media.url_main,
+        src: _vm.domain + product.media.folder + product.media.url_main,
         alt: "photo"
       },
       on: {
@@ -6646,10 +6646,7 @@ var render = function render() {
       }
     }, [_vm._v("Add to\n                                Cart\n                            ")])])]);
   }), 0)])]), _vm._v(" "), _vm.showCart == true && _vm.cart !== undefined && _vm.order !== undefined ? _c("div", {
-    staticClass: "shopping-cart scroll float-right hover-overlay",
-    staticStyle: {
-      "margin-top": "65px"
-    }
+    staticClass: "shopping-cart scroll float-right hover-overlay hover-overlay-add-clr"
   }, [_c("button", {
     staticClass: "btn-close",
     staticStyle: {
@@ -6703,7 +6700,7 @@ var render = function render() {
     }, [_c("img", {
       staticClass: "img-fluid",
       attrs: {
-        src: lineItem.photo,
+        src: _vm.domain + lineItem.photo,
         alt: "Product Photo"
       }
     })])])])]) : _vm._e();
@@ -12194,7 +12191,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.heightPhoto {\n    height: 167px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.heightPhoto img {\n    max-height: 100%;\n    max-width: -moz-fit-content;\n    max-width: fit-content;\n}\n.shopping-cart {\n    opacity: 1;\n    width: 24%;\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background-color: #d5c7c7;\n    padding: 20px;\n    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n    border-radius: 3%;\n}\n.scroll {\n    max-height: 90%; /* set a maximum height for the cart */\n    overflow-y: scroll; /* enable vertical scrolling */\n}\n.carousel-add-clr{\n    height: 200px\n}\n.alert-cart {\n    position: fixed;\n    right: inherit;\n    margin-top: 135px;\n}\n@media (max-width: 575px) {\n.shopping-cart {\n        width: 100% !important;\n        top: 0 ;\n        left: 0 ;\n        bottom: 0 ;\n        border-radius: 0;\n        margin-top: 85px;\n}\n.carousel-add-clr{\n        height: 120px\n}\n.py-5-add-clr {\n        padding-top: 16px !important;\n}\n.nav-item {\n        flex: 0 0 auto;\n        margin-right: 1rem;\n}\n.scroll-list {\n        margin-top: 15px;\n        order: 999;\n        overflow-x: scroll;\n        -webkit-overflow-scrolling: touch; /* enables momentum scrolling on iOS */\n        white-space: nowrap;\n}\n.scroll-list ul {\n        list-style: none;\n        padding: 0;\n        margin: 0;\n}\n.nav-bar-add-clr {\n        height: auto !important;\n}\n.container-add-clr {\n        padding-top: 15px;\n}\n.data-cart-add-clr{\n        width: 55%;\n}\n.photo-cart-add-clr{\n        width: 45%;\n        margin-top: 30px;\n}\n.heightPhoto {\n        height: 167px;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n}\n.heightPhoto img {\n        max-height: 100%;\n        max-width: -moz-fit-content;\n        max-width: fit-content;\n        width: 60%;\n}\n}\n.scroll-list li {\n    display: inline-block;\n    margin-right: 45px !important;\n    vertical-align: middle;\n}\n.scroll-list li:last-child {\n    margin-right: 0;\n}\n.fixed-top {\n    position: fixed;\n    top: 0;\n    left: 30px; /* change this value to adjust the button's position */\n    z-index: 9999; /* to ensure the button is always on top */\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.heightPhoto {\n    height: 167px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.heightPhoto img {\n    max-height: 100%;\n    max-width: -moz-fit-content;\n    max-width: fit-content;\n}\n.shopping-cart {\n    opacity: 1;\n    width: 24%;\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background-color: #d5c7c7;\n    padding: 20px;\n    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n    border-radius: 3%;\n    margin-top: 65px;\n}\n.scroll {\n    max-height: 90%; /* set a maximum height for the cart */\n    overflow-y: scroll; /* enable vertical scrolling */\n}\n.carousel-add-clr{\n    height: 200px\n}\n.alert-cart {\n    position: fixed;\n    right: inherit;\n    margin-top: 135px;\n}\n@media (max-width: 575px) {\n.shopping-cart {\n        width: 100% !important;\n        top: 0 ;\n        left: 0 ;\n        bottom: 0 ;\n        border-radius: 0;\n        margin-top: 85px !important;\n}\n.carousel-add-clr{\n        height: 120px\n}\n.py-5-add-clr {\n        padding-top: 16px !important;\n}\n.nav-item {\n        flex: 0 0 auto;\n        margin-right: 1rem;\n}\n.scroll-list {\n        margin-top: 15px;\n        order: 999;\n        overflow-x: scroll;\n        -webkit-overflow-scrolling: touch; /* enables momentum scrolling on iOS */\n        white-space: nowrap;\n}\n.scroll-list ul {\n        list-style: none;\n        padding: 0;\n        margin: 0;\n}\n.nav-bar-add-clr {\n        height: auto !important;\n}\n.container-add-clr {\n        padding-top: 15px;\n}\n.data-cart-add-clr{\n        width: 55%;\n}\n.photo-cart-add-clr{\n        width: 45%;\n        margin-top: 30px;\n}\n.heightPhoto {\n        height: 167px;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n}\n.heightPhoto img {\n        max-height: 100%;\n        max-width: -moz-fit-content;\n        max-width: fit-content;\n        width: 50%;\n}\n}\n.scroll-list li {\n    display: inline-block;\n    margin-right: 45px !important;\n    vertical-align: middle;\n}\n.scroll-list li:last-child {\n    margin-right: 0;\n}\n.fixed-top {\n    position: fixed;\n    top: 0;\n    left: 30px; /* change this value to adjust the button's position */\n    z-index: 9999; /* to ensure the button is always on top */\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

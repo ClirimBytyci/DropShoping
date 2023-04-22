@@ -9,15 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'DropShopping') }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Bootstrap CDN Links -->
-{{--    <link rel="stylesheet"--}}
-{{--          href=--}}
-{{--              "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">--}}
-
-    <!-- Tailwind CSS CDN Links -->
-{{--    <link href=--}}
-{{--              "https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"--}}
-{{--          rel="stylesheet">--}}
 </head>
 <body>
 <div>

@@ -15,94 +15,91 @@
     }
 </style>
 <body class="container w-50 pt-5 mt-4">
-
-{{$domain}}
-
-@error('additionalPhotos')
-<div class="alert alert-danger">{{ $message }}</div>
-@enderror
-<div style="border-radius: 15px; background-color: #ded9d9;" class="p-5">
-    <form method="post" action="{{ route('create.product') }}" enctype="multipart/form-data">
-        @csrf
-        <div class="h4 pb-2 mb-4 text-danger border-bottom border-danger">
-            Product Registration
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="product-name" class="form-label">Product Name</label>
-                <input type="text" class="form-control" id="product-name" name="name" required>
+    @error('additionalPhotos')
+        <div class="alert alert-danger">{{ $message }}</div>
+    @enderror
+    <div style="border-radius: 15px; background-color: #ded9d9;" class="p-5">
+        <form method="post" action="{{ route('create.product') }}" enctype="multipart/form-data">
+            @csrf
+            <div class="h4 pb-2 mb-4 text-danger border-bottom border-danger">
+                Product Registration
             </div>
-            <div class="col-md-6">
-                <label for="title" class="form-label">Title Description</label>
-                <input type="text" class="form-control" id="title" name="title" required>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="category" class="form-label">Category</label>
-                <select class="form-select" id="category" name="category">
-                    @foreach($categories as $category)
-                        <option value="{{$category['id']}}" selected>{{$category['name']}}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label for="tax" class="form-label">Tax</label>
-                <select class="form-select" id="tax" name="tax">
-                    <option value="standard" selected>Standard Tax</option>
-                    <option value="high">High Tax</option>
-                </select>
-            </div>
-            <div class="col-md-2 pt-4" >
-                <div class="form-check form-switch pt-3 ml">
-                    <input class="form-check-input" type="checkbox" id="active" name="active" checked>
-                    <label class="form-check-label" for="active">
-                        Active
-                    </label>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="product-name" class="form-label">Product Name</label>
+                    <input type="text" class="form-control" id="product-name" name="name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="title" class="form-label">Title Description</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
                 </div>
             </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="product-number" class="form-label">Product Number</label>
-                <input type="text" class="form-control" id="product-number" name="product-number" required>
-            </div>
-            <div class="col-md-4">
-                <label for="price" class="form-label">Price</label>
-                <div class="input-group">
-                    <span class="input-group-text">€</span>
-                    <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="category" class="form-label">Category</label>
+                    <select class="form-select" id="category" name="category">
+                        @foreach($categories as $category)
+                            <option value="{{$category['id']}}" selected>{{$category['name']}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="tax" class="form-label">Tax</label>
+                    <select class="form-select" id="tax" name="tax">
+                        <option value="standard" selected>Standard Tax</option>
+                        <option value="high">High Tax</option>
+                    </select>
+                </div>
+                <div class="col-md-2 pt-4" >
+                    <div class="form-check form-switch pt-3 ml">
+                        <input class="form-check-input" type="checkbox" id="active" name="active" checked>
+                        <label class="form-check-label" for="active">
+                            Active
+                        </label>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <label for="stock" class="form-label">Stock</label>
-                <input type="number" class="form-control" id="stock" name="stock" required>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="main-photo" class="form-label">Main Photo</label>
-                <input class="form-control" type="file" id="main-photo" name="mainPhoto">
-            </div>
-            <div class="col-md-6">
-                <label for="additional-photos" class="form-label">Additional Photos</label>
-                <input class="form-control" type="file" id="additional-photos" name="additionalPhotos[]" multiple>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3"></textarea>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="product-number" class="form-label">Product Number</label>
+                    <input type="text" class="form-control" id="product-number" name="product-number" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="price" class="form-label">Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text">€</span>
+                        <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="stock" class="form-label">Stock</label>
+                    <input type="number" class="form-control" id="stock" name="stock" required>
                 </div>
             </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <button type="submit" class="btn btn-primary mt-4 w-100" style="height: 50px">Save</button>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="main-photo" class="form-label">Main Photo</label>
+                    <input class="form-control" type="file" id="main-photo" name="mainPhoto">
+                </div>
+                <div class="col-md-6">
+                    <label for="additional-photos" class="form-label">Additional Photos</label>
+                    <input class="form-control" type="file" id="additional-photos" name="additionalPhotos[]" multiple>
+                </div>
             </div>
-        </div>
-    </form>
-</div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary mt-4 w-100" style="height: 50px">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

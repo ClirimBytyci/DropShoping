@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Domain;
 use App\Models\Media;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -30,6 +31,8 @@ class ProductPageController extends Controller
         $isLogin = Auth::check();
         $user = auth()->user();
 
+        $domain = Domain::where('active', true)->first()['domain'];
+
         if (is_null($categoryName)){
             $product = Product::where('active', true)
                 ->with('media')
@@ -41,7 +44,7 @@ class ProductPageController extends Controller
                     $media = $product->media;
                     if ($media) {
                         $media->product_id = encrypt($media->product_id);
-                        unset($media->product_id, $media->created_at, $media->updated_at, $media->user_id);
+                        unset($media->product_id, $media->created_at, $media->updated_at);
                     }
                     $category = $product->category;
                     if ($category) {
@@ -63,7 +66,7 @@ class ProductPageController extends Controller
                     $media = $product->media;
                     if ($media) {
                         $media->product_id = encrypt($media->product_id);
-                        unset($media->product_id, $media->created_at, $media->updated_at, $media->user_id);
+                        unset($media->product_id, $media->created_at, $media->updated_at);
                     }
                     $category = $product->category;
                     if ($category) {
@@ -73,11 +76,10 @@ class ProductPageController extends Controller
                 });
         }
 
-
-
         $data = [];
         if ($product){
             $data['products'] = $product;
+            $data['domain'] = $domain;
         }
         $data['cart'] = [];
         $data['account'] = [];
@@ -87,9 +89,6 @@ class ProductPageController extends Controller
                 'id' => auth()->user()['id'],
                 'isLogin' =>$isLogin
             ];
-            if (Media::where('user_id', auth()->user()['id'])->first()){
-                $data['account']['url'] = Media::where('user_id', auth()->user()['id'])->first()['url'];
-            }
 
             $cart = Cart::where('user_id', $user['id'])->first();
             if ($cart){
@@ -117,6 +116,12 @@ class ProductPageController extends Controller
         if (!$product) {
             abort(404);
         }
+        $domain = Domain::where('active', true)->first()['domain'].$product->media['folder'];
+        $images = json_decode($product->media['url_additional']);
+
+        $images = array_map(function($image) use ($domain) {
+            return $domain . $image;
+        }, $images);
 
         $productData = [
             'name'=> $product['name'],
@@ -125,8 +130,8 @@ class ProductPageController extends Controller
             'tax_status'=> $product['tax_status'],
             'price'=> $product['price'],
             'media'=> [
-                'url_main'=> $product->media['url_main'],
-                'url_additional'=> json_decode($product->media['url_additional']),
+                'url_main'=> $domain.$product->media['url_main'],
+                'url_additional'=> $images,
             ],
             'id'=>$request->query->all()['id']
         ];

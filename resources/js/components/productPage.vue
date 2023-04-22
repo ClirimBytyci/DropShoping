@@ -41,7 +41,9 @@
                         <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
                            id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown"
                            aria-expanded="false">
-                            <img v-if="isLogin && img " :src="img" class="rounded-circle"
+                            <img v-if="isLogin"
+                                 src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-unknown-social-media-user-photo-default-avatar-profile-icon-vector-unknown-social-media-user-184816085.jpg"
+                                 class="rounded-circle"
                                  height="40px" alt="Black and White Portrait of a Man" loading="lazy"/>
                             <img v-else
                                  src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-unknown-social-media-user-photo-default-avatar-profile-icon-vector-unknown-social-media-user-184816085.jpg"
@@ -123,7 +125,7 @@
                             </div>
 
                             <div class="heightPhoto">
-                                <img :src="product.media.url_main"
+                                <img :src="domain+product.media.folder+product.media.url_main"
                                      @click = "insideProduct(product.id, product.name, product.product_number)"
                                      style="cursor: pointer"
                                      class="card-img-top p-3" alt="photo"/>
@@ -165,7 +167,7 @@
         <!--            <section style="background-color: #eee;">-->
 
         <div v-if="showCart == true && cart !== undefined && order !== undefined"
-             class="shopping-cart scroll float-right hover-overlay" style="margin-top: 65px">
+             class="shopping-cart scroll float-right hover-overlay hover-overlay-add-clr">
             <button @click="hideCart" class="btn-close" aria-label="close icon"
                     style="left: 100%; position: sticky;"></button>
 
@@ -183,7 +185,7 @@
                             <p class="card-text">Total: {{ lineItem.quantity * lineItem.price.totalPrice }}</p>
                         </div>
                         <div class="col-md-6 photo-cart-add-clr">
-                            <img :src="lineItem.photo"
+                            <img :src="domain+lineItem.photo"
                                  class="img-fluid" alt="Product Photo" style="">
                         </div>
                     </div>
@@ -230,8 +232,8 @@ export default {
             alertCart: false,
             isLogin: this.isLogin,
             name: '',
-            img: '',
             account : [],
+            domain : ''
         }
     },
 
@@ -240,7 +242,6 @@ export default {
     },
 
     created() {
-        console.log(this.category)
         axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     },
 
@@ -283,12 +284,13 @@ export default {
                     this.products = response.data.products;
                     this.isLogin = response.data.account.isLogin;
                     this.name = response.data.account.name;
-                    this.img = response.data.account.url;
                     this.cart = response.data.cart.cart;
                     this.payload = response.data.cart.payload;
                     this.order = response.data.cart.order;
                     this.price = response.data.cart.price;
                     this.account = response.data.account
+                    this.domain = response.data.domain
+                    console.log(this.domain);
                     if (this.cart == null) {
                         this.opacity = 1;
                         this.notificationCart = 0;
@@ -376,6 +378,7 @@ export default {
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border-radius: 3%;
+    margin-top: 65px;
 }
 
 .scroll {
@@ -398,7 +401,7 @@ export default {
         left: 0 ;
         bottom: 0 ;
         border-radius: 0;
-        margin-top: 85px;
+        margin-top: 85px !important;
     }
     .carousel-add-clr{
         height: 120px
@@ -444,7 +447,7 @@ export default {
     .heightPhoto img {
         max-height: 100%;
         max-width: fit-content;
-        width: 60%;
+        width: 50%;
     }
 }
 .scroll-list li {
@@ -455,7 +458,6 @@ export default {
 .scroll-list li:last-child {
     margin-right: 0;
 }
-
 .fixed-top {
     position: fixed;
     top: 0;

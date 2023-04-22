@@ -6,24 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
-class Media extends Model
+class Domain extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'product_id',
-        'folder',
-        'url_main',
-        'url_additional'
-    ];
 
+    protected $fillable = [
+        'id',
+        'domain',
+        'active'
+    ];
     protected $primaryKey = 'id';
     protected $keyType = 'string';
     public $incrementing = false;
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
-    }
     protected static function boot()
     {
         parent::boot();
