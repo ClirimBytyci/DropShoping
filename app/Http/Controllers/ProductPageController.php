@@ -10,7 +10,6 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
-use function PHPUnit\Framework\isNull;
 
 class ProductPageController extends Controller
 {
@@ -32,7 +31,6 @@ class ProductPageController extends Controller
         $user = auth()->user();
 
         $domain = Domain::where('active', true)->first()['domain'];
-
         if (is_null($categoryName)){
             $product = Product::where('active', true)
                 ->with('media')
@@ -112,29 +110,44 @@ class ProductPageController extends Controller
         $id = decrypt($request->query->all()['id']);
 
         $product = Product::where('id', $id)->where('name', $productTitle)->where('product_number', $productNumber)->with('media')->get()->first();
-
         if (!$product) {
             abort(404);
         }
-        $domain = Domain::where('active', true)->first()['domain'].$product->media['folder'];
-        $images = json_decode($product->media['url_additional']);
+        $domain = Domain::where('active', true)->first()['domain'];
+        if (!is_null($product->media)){
+            $images = json_decode($product->media['url_additional']);
 
-        $images = array_map(function($image) use ($domain) {
-            return $domain . $image;
-        }, $images);
-
-        $productData = [
-            'name'=> $product['name'],
-            'description'=> $product['description'],
-            'stock'=> $product['stock'],
-            'tax_status'=> $product['tax_status'],
-            'price'=> $product['price'],
-            'media'=> [
-                'url_main'=> $domain.$product->media['url_main'],
-                'url_additional'=> $images,
-            ],
-            'id'=>$request->query->all()['id']
-        ];
+            if ($images){
+                $images = array_map(function($image) use ($domain) {
+                    return  $image;
+                }, $images);
+            }
+            $productData = [
+                'name'=> $product['name'],
+                'description'=> $product['description'],
+                'stock'=> $product['stock'],
+                'tax_status'=> $product['tax_status'],
+                'price'=> $product['price'],
+                'media'=> [
+                    'url_main'=> $product->media['url_main'],
+                    'url_additional'=> $images,
+                    'folder'=> $product->media['folder'],
+                ],
+                'id'=>$request->query->all()['id'],
+                'domain'=>$domain
+            ];
+        }else{
+            $productData = [
+                'name'=> $product['name'],
+                'description'=> $product['description'],
+                'stock'=> $product['stock'],
+                'tax_status'=> $product['tax_status'],
+                'price'=> $product['price'],
+                'media'=> null,
+                'id'=>$request->query->all()['id'],
+                'domain'=>$domain
+            ];
+        }
 
         return view('inProductPage', [
             'productData'=>$productData
@@ -152,6 +165,10 @@ class ProductPageController extends Controller
             unset($category->updated_at);
             unset($category->visible);
         });
-        return view('categoryPage', ['categories'=>$categories, 'categoryName'=>$name]);
+
+        return view('categoryPage', [
+            'categories'=>$categories,
+            'categoryName'=>$name
+        ]);
     }
 }

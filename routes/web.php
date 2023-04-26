@@ -48,7 +48,7 @@ Route::get('/', [ProductPageController::class, 'productPage'])->name('product.pa
 Route::post('/api/products', [ProductPageController::class, 'productData']);
 
 Route::get('/product/{productTitle}/{productNumber}', [ProductPageController::class,'insideProductPage']);
-Route::get('/category/{name}', [ProductPageController::class,'category']);
+Route::get('/{name}', [ProductPageController::class,'category']);
 
 Route::delete('/api/delete/{lineItemId}', [checkOutProduct::class, 'deleteFromCart']);
 Route::get('/edit/profile/{name}', [EditProfileClient::class,'profileClient'])->middleware(Authenticate::class);

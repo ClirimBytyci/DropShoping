@@ -5395,11 +5395,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _public_frontend_admin_src_js_mdb_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../public/frontend_admin/src/js/mdb/util */ "./public/frontend_admin/src/js/mdb/util/index.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data'],
   data: function data() {
     return {
-      photoCover: this.data.media.url_main,
+      photoCover: null,
       products: [],
       cart: [],
       order: [],
@@ -5420,8 +5422,10 @@ __webpack_require__.r(__webpack_exports__);
   // },
 
   methods: {
+    array: _public_frontend_admin_src_js_mdb_util__WEBPACK_IMPORTED_MODULE_0__.array,
     changePhoto: function changePhoto(urlPhoto) {
       this.photoCover = urlPhoto;
+      console.log(urlPhoto);
     },
     addToCart: function addToCart(product) {
       var _this = this;
@@ -5430,7 +5434,7 @@ __webpack_require__.r(__webpack_exports__);
         _token: document.querySelector('meta[name="csrf-token-inside-product-page"]').getAttribute('content')
       }).then(function (response) {
         _this.showCart = true;
-        _this.refreshCart();
+        // this.refreshCart();
         _this.opacity = 0.5;
         _this.notificationCart = 1;
       })["catch"](function (error) {
@@ -5496,6 +5500,9 @@ __webpack_require__.r(__webpack_exports__);
     // },
     goBack: function goBack() {
       window.history.back();
+    },
+    homePage: function homePage() {
+      window.location.href = "/";
     }
   }
 });
@@ -5550,17 +5557,21 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     addToCart: function addToCart(product) {
       var _this = this;
-      axios.post("/api/cart", {
-        product: product,
-        _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      }).then(function (response) {
-        _this.showCart = true;
-        _this.refreshCart();
-        _this.opacity = 0.5;
-        _this.notificationCart = 1;
-      })["catch"](function (error) {
-        console.error('Error adding to cart:', error);
-      });
+      if (this.isLogin) {
+        axios.post("/api/cart", {
+          product: product,
+          _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }).then(function (response) {
+          _this.showCart = true;
+          _this.refreshCart();
+          _this.opacity = 0.5;
+          _this.notificationCart = 1;
+        })["catch"](function (error) {
+          console.error('Error adding to cart:', error);
+        });
+      } else {
+        window.location.href = "/login";
+      }
     },
     deleteItem: function deleteItem(lineItemId) {
       var _this2 = this;
@@ -5587,7 +5598,6 @@ __webpack_require__.r(__webpack_exports__);
         _this3.price = response.data.cart.price;
         _this3.account = response.data.account;
         _this3.domain = response.data.domain;
-        console.log(_this3.domain);
         if (_this3.cart == null) {
           _this3.opacity = 1;
           _this3.notificationCart = 0;
@@ -5637,7 +5647,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     categoryPage: function categoryPage(id, name) {
-      window.location.href = "/category/".concat(name);
+      window.location.href = "/".concat(name);
     },
     homePage: function homePage() {
       window.location.href = "/";
@@ -6025,7 +6035,21 @@ var render = function render() {
     _c = _vm._self._c;
   return _c("div", [_c("header", {
     staticClass: "bg-gray-800 text-white flex items-center justify-between px-4 py-3 fixed top-0 left-0 w-full z-50"
-  }, [_vm._m(0), _vm._v(" "), _c("div", {
+  }, [_c("div", {
+    staticClass: "flex items-center"
+  }, [_c("img", {
+    staticClass: "h-8",
+    staticStyle: {
+      cursor: "pointer"
+    },
+    attrs: {
+      src: __webpack_require__(/*! ../../../Free_logo.svg.png */ "./Free_logo.svg.png"),
+      alt: "Shop logo"
+    },
+    on: {
+      click: _vm.homePage
+    }
+  })]), _vm._v(" "), _c("div", {
     staticClass: "flex items-center"
   }, [_c("a", {
     staticClass: "text-reset me-3 hidden-arrow inline-flex items-center",
@@ -6056,7 +6080,7 @@ var render = function render() {
       "margin-left": "-10px"
     }
   }, [_vm._v("0")])]), _vm._v(" "), _c("button", {
-    staticClass: "bg-gray-700 hover:bg-gray-900 text-white rounded-full px-4 py-2 mr-4",
+    staticClass: "bg-gray-700 hover:bg-gray-900 text-white rounded-full px-4 py-2",
     on: {
       click: _vm.goBack
     }
@@ -6075,7 +6099,45 @@ var render = function render() {
     staticStyle: {
       margin: "auto"
     }
-  }, [_c("div", {
+  }, [_vm.data.media !== null ? _c("div", {
+    staticClass: "max-w-xl overflow-hidden rounded-lg",
+    staticStyle: {
+      height: "480px",
+      display: "flex",
+      "justify-content": "center",
+      "align-items": "center"
+    }
+  }, [_vm.photoCover !== null ? _c("img", {
+    staticStyle: {
+      "max-height": "100%",
+      "max-width": "fit-content",
+      width: "-webkit-fill-available"
+    },
+    attrs: {
+      src: _vm.photoCover,
+      alt: ""
+    }
+  }) : _vm.data.media.url_main !== null ? _c("img", {
+    staticStyle: {
+      "max-height": "100%",
+      "max-width": "fit-content",
+      width: "-webkit-fill-available"
+    },
+    attrs: {
+      src: _vm.data.domain + _vm.data.media.folder + _vm.data.media.url_main,
+      alt: ""
+    }
+  }) : _vm.data.media.url_additional !== null ? _c("img", {
+    staticStyle: {
+      "max-height": "100%",
+      "max-width": "fit-content",
+      width: "-webkit-fill-available"
+    },
+    attrs: {
+      src: _vm.data.domain + _vm.data.media.folder + _vm.data.media.url_additional[0],
+      alt: ""
+    }
+  }) : _vm._e()]) : _c("div", {
     staticClass: "max-w-xl overflow-hidden rounded-lg",
     staticStyle: {
       height: "480px",
@@ -6086,18 +6148,19 @@ var render = function render() {
   }, [_c("img", {
     staticStyle: {
       "max-height": "100%",
+      height: "100%",
       "max-width": "fit-content",
       width: "-webkit-fill-available"
     },
     attrs: {
-      src: _vm.photoCover,
+      src: __webpack_require__(/*! ../../../blank.svg */ "./blank.svg"),
       alt: ""
     }
   })])]), _vm._v(" "), _c("div", {
     staticClass: "mt-2 w-auto lg:order-1 lg:w-32 lg:flex-shrink-0"
-  }, [_c("div", {
+  }, [_vm.data.media !== null ? _c("div", {
     staticClass: "flex flex-row items-start lg:flex-col"
-  }, [_c("button", {
+  }, [_vm.data.media.url_main !== null ? _c("button", {
     staticClass: "flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg text-center",
     staticStyle: {
       "box-shadow": "2px 3px 14px gainsboro"
@@ -6107,17 +6170,17 @@ var render = function render() {
     },
     on: {
       click: function click($event) {
-        return _vm.changePhoto(_vm.data.media.url_main);
+        return _vm.changePhoto(_vm.data.domain + _vm.data.media.folder + _vm.data.media.url_main);
       }
     }
   }, [_c("img", {
     staticClass: "h-full w-full object-cover",
     attrs: {
-      src: _vm.data.media.url_main,
+      src: _vm.data.domain + _vm.data.media.folder + _vm.data.media.url_main,
       alt: ""
     }
-  })]), _vm._v(" "), _vm._l(_vm.data.media.url_additional, function (photo) {
-    return _c("button", {
+  })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.data.media.url_additional, function (photo) {
+    return _vm.data.media.url_additional !== null ? _c("button", {
       staticClass: "flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-transparent text-center",
       staticStyle: {
         "box-shadow": "2px 3px 14px gainsboro"
@@ -6128,19 +6191,21 @@ var render = function render() {
     }, [_c("img", {
       staticClass: "h-full w-full object-cover",
       attrs: {
-        src: photo,
+        src: _vm.data.domain + _vm.data.media.folder + photo,
         alt: ""
       },
       on: {
         click: function click($event) {
-          return _vm.changePhoto(photo);
+          return _vm.changePhoto(_vm.data.domain + _vm.data.media.folder + photo);
         }
       }
-    })]);
-  })], 2)])])]), _vm._v(" "), _c("div", {
+    })]) : _vm._e();
+  })], 2) : _c("div", {
+    staticClass: "flex flex-row items-start lg:flex-col"
+  }, [_vm._m(0)])])])]), _vm._v(" "), _c("div", {
     staticClass: "lg:col-span-2 lg:row-span-2 lg:row-end-2"
   }, [_c("h1", {
-    staticClass: "sm: text-2xl font-bold text-gray-900 sm:text-3xl"
+    staticClass: "sm: text-2xl font-bold text-gray-900 sm:text-3xl tilte-clr"
   }, [_vm._v(_vm._s(_vm.data.name))]), _vm._v(" "), _c("div", {
     staticClass: "mt-5 flex items-center"
   }, [_c("div", {
@@ -6240,7 +6305,7 @@ var render = function render() {
       d: "M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
     }
   })]), _vm._v("\n                                Add to cart\n                            ")])]), _vm._v(" "), _c("ul", {
-    staticClass: "mt-8 space-y-2"
+    staticClass: "mt-3 space-y-2"
   }, [_c("li", {
     staticClass: "flex items-center text-left text-sm font-medium text-gray-600"
   }, [_c("svg", {
@@ -6278,23 +6343,29 @@ var render = function render() {
   })]), _vm._v("\n                                Cancel Anytime\n                            ")])])]), _vm._v(" "), _c("div", {
     staticClass: "lg:col-span-3"
   }, [_vm._m(3), _vm._v(" "), _c("div", {
-    staticClass: "mt-8 flow-root sm:mt-12"
+    staticClass: "mt-2 flow-root sm:mt-12"
   }, [_c("h1", {
-    staticClass: "mt-8 text-3xl font-bold"
-  }, [_vm._v("From the Fine Farms of Brazil")]), _vm._v(" "), _c("p", {
+    staticClass: "mt-3 text-3xl font-bold"
+  }, [_vm._v(_vm._s(_vm.data.name))]), _vm._v(" "), _c("p", {
     staticClass: "mt-4"
   }, [_vm._v(_vm._s(_vm.data.description))])])])])])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "flex items-center"
-  }, [_c("img", {
-    staticClass: "h-8",
+  return _c("button", {
+    staticClass: "flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg text-center",
+    staticStyle: {
+      "box-shadow": "2px 3px 14px gainsboro"
+    },
     attrs: {
-      src: __webpack_require__(/*! ../../../Free_logo.svg.png */ "./Free_logo.svg.png"),
-      alt: "Shop logo"
+      type: "button"
+    }
+  }, [_c("img", {
+    staticClass: "h-full w-full object-cover",
+    attrs: {
+      src: __webpack_require__(/*! ../../../blank.webp */ "./blank.webp"),
+      alt: ""
     }
   })]);
 }, function () {
@@ -6302,7 +6373,11 @@ var staticRenderFns = [function () {
     _c = _vm._self._c;
   return _c("div", {
     staticClass: "mt-3 flex select-none flex-wrap items-center gap-1"
-  }, [_c("label", {}, [_c("input", {
+  }, [_c("label", {
+    staticStyle: {
+      width: "31%"
+    }
+  }, [_c("input", {
     staticClass: "peer sr-only",
     attrs: {
       type: "radio",
@@ -6311,8 +6386,12 @@ var staticRenderFns = [function () {
       checked: ""
     }
   }), _vm._v(" "), _c("p", {
-    staticClass: "peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold"
-  }, [_vm._v("Powder")])]), _vm._v(" "), _c("label", {}, [_c("input", {
+    staticClass: "text-center peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-2 py-2 font-bold"
+  }, [_vm._v("Powder")])]), _vm._v(" "), _c("label", {
+    staticStyle: {
+      width: "36%"
+    }
+  }, [_c("input", {
     staticClass: "peer sr-only",
     attrs: {
       type: "radio",
@@ -6320,8 +6399,12 @@ var staticRenderFns = [function () {
       value: "Whole Bean"
     }
   }), _vm._v(" "), _c("p", {
-    staticClass: "peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold"
-  }, [_vm._v("Whole Bean")])]), _vm._v(" "), _c("label", {}, [_c("input", {
+    staticClass: "text-center peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-2 py-2 font-bold"
+  }, [_vm._v("Whole Bean")])]), _vm._v(" "), _c("label", {
+    staticStyle: {
+      width: "30%"
+    }
+  }, [_c("input", {
     staticClass: "peer sr-only",
     attrs: {
       type: "radio",
@@ -6329,14 +6412,18 @@ var staticRenderFns = [function () {
       value: "Groud"
     }
   }), _vm._v(" "), _c("p", {
-    staticClass: "peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold"
+    staticClass: "text-center peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-2 py-2 font-bold"
   }, [_vm._v("Groud")])])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
     staticClass: "mt-3 flex select-none flex-wrap items-center gap-1"
-  }, [_c("label", {}, [_c("input", {
+  }, [_c("label", {
+    staticStyle: {
+      width: "31%"
+    }
+  }, [_c("input", {
     staticClass: "peer sr-only",
     attrs: {
       type: "radio",
@@ -6344,10 +6431,14 @@ var staticRenderFns = [function () {
       value: "4 Months"
     }
   }), _vm._v(" "), _c("p", {
-    staticClass: "peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold"
+    staticClass: "text-center peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-2 py-2 font-bold"
   }, [_vm._v("4 Months")]), _vm._v(" "), _c("span", {
     staticClass: "mt-1 block text-center text-xs"
-  }, [_vm._v("$80/mo")])]), _vm._v(" "), _c("label", {}, [_c("input", {
+  }, [_vm._v("$80/mo")])]), _vm._v(" "), _c("label", {
+    staticStyle: {
+      width: "30%"
+    }
+  }, [_c("input", {
     staticClass: "peer sr-only",
     attrs: {
       type: "radio",
@@ -6356,10 +6447,14 @@ var staticRenderFns = [function () {
       checked: ""
     }
   }), _vm._v(" "), _c("p", {
-    staticClass: "peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold"
+    staticClass: "text-center peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-2 py-2 font-bold"
   }, [_vm._v("8 Months")]), _vm._v(" "), _c("span", {
     staticClass: "mt-1 block text-center text-xs"
-  }, [_vm._v("$60/mo")])]), _vm._v(" "), _c("label", {}, [_c("input", {
+  }, [_vm._v("$60/mo")])]), _vm._v(" "), _c("label", {
+    staticStyle: {
+      width: "36%"
+    }
+  }, [_c("input", {
     staticClass: "peer sr-only",
     attrs: {
       type: "radio",
@@ -6367,7 +6462,7 @@ var staticRenderFns = [function () {
       value: "12 Months"
     }
   }), _vm._v(" "), _c("p", {
-    staticClass: "peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold"
+    staticClass: "text-center peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-2 py-2 font-bold"
   }, [_vm._v("12 Months")]), _vm._v(" "), _c("span", {
     staticClass: "mt-1 block text-center text-xs"
   }, [_vm._v("$40/mo")])])]);
@@ -6415,8 +6510,8 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "container container-add-clr"
-  }, [_c("div", {
+    staticClass: "container container-add-clr p-0"
+  }, [_vm._m(0), _vm._v(" "), _vm._m(1), _vm._v(" "), _c("div", {
     staticClass: "navbar navbar-expand-lg navbar-dark fixed-top bg-light m-0 p-0 nav-bar-add-clr",
     staticStyle: {
       left: "0",
@@ -6571,24 +6666,54 @@ var render = function render() {
     style: {
       opacity: _vm.opacity
     }
-  }, [_vm._m(0), _vm._v(" "), _c("div", {
+  }, [_c("div", {
     staticClass: "container py-5 py-5-add-clr"
   }, [_c("div", {
     staticClass: "row"
   }, _vm._l(_vm.products, function (product) {
     return _c("div", {
-      staticClass: "col-md-6 col-lg-3 mb-4 pb-4 align-items-center justify-content-center"
+      staticClass: "col-md-6 col-lg-3 mb-4 pl pb-4 align-items-center justify-content-center container-product-add-clr"
     }, [_c("div", {
-      staticClass: "card shadow-lg"
-    }, [_vm._m(1, true), _vm._v(" "), _c("div", {
+      staticClass: "card shadow-lg card-add-clr"
+    }, [_vm._m(2, true), _vm._v(" "), product.media !== null ? _c("div", {
       staticClass: "heightPhoto"
-    }, [_c("img", {
-      staticClass: "card-img-top p-3",
+    }, [product.media.url_main ? _c("img", {
+      staticClass: "card-img-top",
       staticStyle: {
         cursor: "pointer"
       },
       attrs: {
         src: _vm.domain + product.media.folder + product.media.url_main,
+        alt: "photo"
+      },
+      on: {
+        click: function click($event) {
+          return _vm.insideProduct(product.id, product.name, product.product_number);
+        }
+      }
+    }) : product.media.url_additional ? _c("img", {
+      staticClass: "card-img-top",
+      staticStyle: {
+        cursor: "pointer"
+      },
+      attrs: {
+        src: _vm.domain + product.media.folder + JSON.parse(product.media.url_additional)[0],
+        alt: "photo"
+      },
+      on: {
+        click: function click($event) {
+          return _vm.insideProduct(product.id, product.name, product.product_number);
+        }
+      }
+    }) : _vm._e()]) : _c("div", {
+      staticClass: "heightPhoto"
+    }, [_c("img", {
+      staticClass: "card-img-top",
+      staticStyle: {
+        cursor: "pointer"
+      },
+      attrs: {
+        src: __webpack_require__(/*! ../../../blank.svg */ "./blank.svg"),
         alt: "photo"
       },
       on: {
@@ -6632,9 +6757,9 @@ var render = function render() {
       staticClass: "d-flex justify-content-between mb-2"
     }, [_c("p", {
       staticClass: "text-muted mb-0"
-    }, [_vm._v("Available: "), _c("span", {
+    }, [_vm._v("Stock: "), _c("span", {
       staticClass: "fw-bold"
-    }, [_vm._v(_vm._s(Math.floor(product.stock)))])]), _vm._v(" "), _vm._m(2, true)])]), _vm._v(" "), _c("button", {
+    }, [_vm._v(_vm._s(Math.floor(product.stock)))])]), _vm._v(" "), _vm._m(3, true)])]), _vm._v(" "), Math.floor(product.stock != 0) ? _c("button", {
       staticClass: "btn btn-success btn-lg",
       attrs: {
         type: "button"
@@ -6644,7 +6769,18 @@ var render = function render() {
           return _vm.addToCart(product);
         }
       }
-    }, [_vm._v("Add to\n                                Cart\n                            ")])])]);
+    }, [_vm._v("Add to Cart\n                            ")]) : _c("button", {
+      staticClass: "btn btn-success btn-lg",
+      attrs: {
+        type: "button",
+        disabled: ""
+      },
+      on: {
+        click: function click($event) {
+          return _vm.addToCart(product);
+        }
+      }
+    }, [_vm._v("Ska Stock\n                            ")])])]);
   }), 0)])]), _vm._v(" "), _vm.showCart == true && _vm.cart !== undefined && _vm.order !== undefined ? _c("div", {
     staticClass: "shopping-cart scroll float-right hover-overlay hover-overlay-add-clr"
   }, [_c("button", {
@@ -6727,10 +6863,7 @@ var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "carousel slide carousel-fade carousel-add-clr",
-    staticStyle: {
-      "margin-top": "100px"
-    },
+    staticClass: "carousel slide carousel-fade carousel-add-clr carousel-add-clr-main",
     attrs: {
       id: "carouselMaterialStyle",
       "data-mdb-ride": "carousel"
@@ -6780,6 +6913,14 @@ var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
+    staticClass: "d-block d-sm-none scroll-list-product align-items-center justify-content-center"
+  }, [_c("ul", {
+    staticClass: "me-auto mb-2 mb-lg-0"
+  })]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
     staticClass: "d-flex justify-content-between p-3"
   }, [_c("p", {
     staticClass: "lead mb-0"
@@ -6810,6 +6951,216 @@ var staticRenderFns = [function () {
   })]);
 }];
 render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./public/frontend_admin/src/js/mdb/util/index.js":
+/*!********************************************************!*\
+  !*** ./public/frontend_admin/src/js/mdb/util/index.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "TRANSITION_END": () => (/* binding */ TRANSITION_END),
+/* harmony export */   "array": () => (/* binding */ array),
+/* harmony export */   "defineJQueryPlugin": () => (/* binding */ defineJQueryPlugin),
+/* harmony export */   "element": () => (/* binding */ element),
+/* harmony export */   "emulateTransitionEnd": () => (/* binding */ emulateTransitionEnd),
+/* harmony export */   "findShadowRoot": () => (/* binding */ findShadowRoot),
+/* harmony export */   "getElementFromSelector": () => (/* binding */ getElementFromSelector),
+/* harmony export */   "getSelectorFromElement": () => (/* binding */ getSelectorFromElement),
+/* harmony export */   "getTransitionDurationFromElement": () => (/* binding */ getTransitionDurationFromElement),
+/* harmony export */   "getUID": () => (/* binding */ getUID),
+/* harmony export */   "getjQuery": () => (/* binding */ getjQuery),
+/* harmony export */   "isElement": () => (/* binding */ isElement),
+/* harmony export */   "isRTL": () => (/* binding */ isRTL),
+/* harmony export */   "isVisible": () => (/* binding */ isVisible),
+/* harmony export */   "noop": () => (/* binding */ noop),
+/* harmony export */   "onDOMContentLoaded": () => (/* binding */ onDOMContentLoaded),
+/* harmony export */   "reflow": () => (/* binding */ reflow),
+/* harmony export */   "triggerTransitionEnd": () => (/* binding */ triggerTransitionEnd),
+/* harmony export */   "typeCheckConfig": () => (/* binding */ typeCheckConfig)
+/* harmony export */ });
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.0.0-beta2): util/index.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+var MAX_UID = 1000000;
+var MILLISECONDS_MULTIPLIER = 1000;
+var TRANSITION_END = 'transitionend';
+
+// Shoutout AngusCroll (https://goo.gl/pxwQGp)
+var toType = function toType(obj) {
+  if (obj === null || obj === undefined) {
+    return "".concat(obj);
+  }
+  return {}.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase();
+};
+
+/**
+ * --------------------------------------------------------------------------
+ * Public Util Api
+ * --------------------------------------------------------------------------
+ */
+
+var getUID = function getUID(prefix) {
+  do {
+    prefix += Math.floor(Math.random() * MAX_UID);
+  } while (document.getElementById(prefix));
+  return prefix;
+};
+var getSelector = function getSelector(element) {
+  var selector = element.getAttribute('data-mdb-target');
+  if (!selector || selector === '#') {
+    var hrefAttr = element.getAttribute('href');
+    selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : null;
+  }
+  return selector;
+};
+var getSelectorFromElement = function getSelectorFromElement(element) {
+  var selector = getSelector(element);
+  if (selector) {
+    return document.querySelector(selector) ? selector : null;
+  }
+  return null;
+};
+var getElementFromSelector = function getElementFromSelector(element) {
+  var selector = getSelector(element);
+  return selector ? document.querySelector(selector) : null;
+};
+var getTransitionDurationFromElement = function getTransitionDurationFromElement(element) {
+  if (!element) {
+    return 0;
+  }
+
+  // Get transition-duration of the element
+  var _window$getComputedSt = window.getComputedStyle(element),
+    transitionDuration = _window$getComputedSt.transitionDuration,
+    transitionDelay = _window$getComputedSt.transitionDelay;
+  var floatTransitionDuration = Number.parseFloat(transitionDuration);
+  var floatTransitionDelay = Number.parseFloat(transitionDelay);
+
+  // Return 0 if element or transition duration is not found
+  if (!floatTransitionDuration && !floatTransitionDelay) {
+    return 0;
+  }
+
+  // If multiple durations are defined, take the first
+  transitionDuration = transitionDuration.split(',')[0];
+  transitionDelay = transitionDelay.split(',')[0];
+  return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
+};
+var triggerTransitionEnd = function triggerTransitionEnd(element) {
+  element.dispatchEvent(new Event(TRANSITION_END));
+};
+var isElement = function isElement(obj) {
+  return (obj[0] || obj).nodeType;
+};
+var emulateTransitionEnd = function emulateTransitionEnd(element, duration) {
+  var called = false;
+  var durationPadding = 5;
+  var emulatedDuration = duration + durationPadding;
+  function listener() {
+    called = true;
+    element.removeEventListener(TRANSITION_END, listener);
+  }
+  element.addEventListener(TRANSITION_END, listener);
+  setTimeout(function () {
+    if (!called) {
+      triggerTransitionEnd(element);
+    }
+  }, emulatedDuration);
+};
+var typeCheckConfig = function typeCheckConfig(componentName, config, configTypes) {
+  Object.keys(configTypes).forEach(function (property) {
+    var expectedTypes = configTypes[property];
+    var value = config[property];
+    var valueType = value && isElement(value) ? 'element' : toType(value);
+    if (!new RegExp(expectedTypes).test(valueType)) {
+      throw new Error("".concat(componentName.toUpperCase(), ": ") + "Option \"".concat(property, "\" provided type \"").concat(valueType, "\" ") + "but expected type \"".concat(expectedTypes, "\"."));
+    }
+  });
+};
+var isVisible = function isVisible(element) {
+  if (!element) {
+    return false;
+  }
+  if (element.style && element.parentNode && element.parentNode.style) {
+    var elementStyle = getComputedStyle(element);
+    var parentNodeStyle = getComputedStyle(element.parentNode);
+    return elementStyle.display !== 'none' && parentNodeStyle.display !== 'none' && elementStyle.visibility !== 'hidden';
+  }
+  return false;
+};
+var findShadowRoot = function findShadowRoot(element) {
+  if (!document.documentElement.attachShadow) {
+    return null;
+  }
+
+  // Can find the shadow root otherwise it'll return the document
+  if (typeof element.getRootNode === 'function') {
+    var root = element.getRootNode();
+    return root instanceof ShadowRoot ? root : null;
+  }
+  if (element instanceof ShadowRoot) {
+    return element;
+  }
+
+  // when we don't find a shadow root
+  if (!element.parentNode) {
+    return null;
+  }
+  return findShadowRoot(element.parentNode);
+};
+var noop = function noop() {
+  return function () {};
+};
+var reflow = function reflow(element) {
+  return element.offsetHeight;
+};
+var getjQuery = function getjQuery() {
+  var _window = window,
+    jQuery = _window.jQuery;
+  if (jQuery && !document.body.hasAttribute('data-mdb-no-jquery')) {
+    return jQuery;
+  }
+  return null;
+};
+var onDOMContentLoaded = function onDOMContentLoaded(callback) {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', callback);
+  } else {
+    callback();
+  }
+};
+var isRTL = document.documentElement.dir === 'rtl';
+var array = function array(collection) {
+  return Array.from(collection);
+};
+var element = function element(tag) {
+  return document.createElement(tag);
+};
+var defineJQueryPlugin = function defineJQueryPlugin(name, plugin) {
+  onDOMContentLoaded(function () {
+    var $ = getjQuery();
+    /* istanbul ignore if */
+    if ($) {
+      var JQUERY_NO_CONFLICT = $.fn[name];
+      $.fn[name] = plugin.jQueryInterface;
+      $.fn[name].Constructor = plugin;
+      $.fn[name].noConflict = function () {
+        $.fn[name] = JQUERY_NO_CONFLICT;
+        return plugin.jQueryInterface;
+      };
+    }
+  });
+};
 
 
 /***/ }),
@@ -12167,7 +12518,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.boxShadow {\n    padding: 16px;\n    border-radius: 45px;\n    box-shadow: 2px 3px 14px gainsboro;\n    height: 520px;\n}\n.shopping-cart {\n    opacity: 1;\n    width: 24%;\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background-color: #d5c7c7;\n    padding: 20px;\n    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n    border-radius: 3%;\n}\n.scroll {\n    max-height: 90%; /* set a maximum height for the cart */\n    overflow-y: scroll; /* enable vertical scrolling */\n}\n.fixed-top {\n    position: fixed;\n    top: 0;\n    left: 30px; /* change this value to adjust the button's position */\n    z-index: 9999; /* to ensure the button is always on top */\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.boxShadow {\n    padding: 16px;\n    border-radius: 45px;\n    box-shadow: 2px 3px 14px gainsboro;\n    height: 520px;\n}\n.shopping-cart {\n    opacity: 1;\n    width: 24%;\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background-color: #d5c7c7;\n    padding: 20px;\n    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n    border-radius: 3%;\n}\n.scroll {\n    max-height: 90%; /* set a maximum height for the cart */\n    overflow-y: scroll; /* enable vertical scrolling */\n}\n.fixed-top {\n    position: fixed;\n    top: 0;\n    left: 30px; /* change this value to adjust the button's position */\n    z-index: 9999; /* to ensure the button is always on top */\n}\n@media (max-width: 575px) {\n.tilte-clr {\n        padding-top: 40px;\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12191,7 +12542,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.heightPhoto {\n    height: 167px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.heightPhoto img {\n    max-height: 100%;\n    max-width: -moz-fit-content;\n    max-width: fit-content;\n}\n.shopping-cart {\n    opacity: 1;\n    width: 24%;\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background-color: #d5c7c7;\n    padding: 20px;\n    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n    border-radius: 3%;\n    margin-top: 65px;\n}\n.scroll {\n    max-height: 90%; /* set a maximum height for the cart */\n    overflow-y: scroll; /* enable vertical scrolling */\n}\n.carousel-add-clr{\n    height: 200px\n}\n.alert-cart {\n    position: fixed;\n    right: inherit;\n    margin-top: 135px;\n}\n@media (max-width: 575px) {\n.shopping-cart {\n        width: 100% !important;\n        top: 0 ;\n        left: 0 ;\n        bottom: 0 ;\n        border-radius: 0;\n        margin-top: 85px !important;\n}\n.carousel-add-clr{\n        height: 120px\n}\n.py-5-add-clr {\n        padding-top: 16px !important;\n}\n.nav-item {\n        flex: 0 0 auto;\n        margin-right: 1rem;\n}\n.scroll-list {\n        margin-top: 15px;\n        order: 999;\n        overflow-x: scroll;\n        -webkit-overflow-scrolling: touch; /* enables momentum scrolling on iOS */\n        white-space: nowrap;\n}\n.scroll-list ul {\n        list-style: none;\n        padding: 0;\n        margin: 0;\n}\n.nav-bar-add-clr {\n        height: auto !important;\n}\n.container-add-clr {\n        padding-top: 15px;\n}\n.data-cart-add-clr{\n        width: 55%;\n}\n.photo-cart-add-clr{\n        width: 45%;\n        margin-top: 30px;\n}\n.heightPhoto {\n        height: 167px;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n}\n.heightPhoto img {\n        max-height: 100%;\n        max-width: -moz-fit-content;\n        max-width: fit-content;\n        width: 50%;\n}\n}\n.scroll-list li {\n    display: inline-block;\n    margin-right: 45px !important;\n    vertical-align: middle;\n}\n.scroll-list li:last-child {\n    margin-right: 0;\n}\n.fixed-top {\n    position: fixed;\n    top: 0;\n    left: 30px; /* change this value to adjust the button's position */\n    z-index: 9999; /* to ensure the button is always on top */\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.heightPhoto {\n    height: 167px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.heightPhoto img {\n    max-height: 100%;\n    max-width: -moz-fit-content;\n    max-width: fit-content;\n}\n.shopping-cart {\n    opacity: 1;\n    width: 24%;\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background-color: #d5c7c7;\n    padding: 20px;\n    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n    border-radius: 3%;\n    margin-top: 65px;\n}\n.scroll {\n    max-height: 90%; /* set a maximum height for the cart */\n    overflow-y: scroll; /* enable vertical scrolling */\n}\n.carousel-add-clr {\n    height: 200px\n}\n.alert-cart {\n    position: fixed;\n    right: inherit;\n    margin-top: 135px;\n}\n@media (max-width: 575px) {\n.shopping-cart {\n        width: 100% !important;\n        top: 0;\n        left: 0;\n        bottom: 0;\n        border-radius: 0;\n        margin-top: 85px !important;\n}\n.carousel-add-clr {\n        height: 120px\n}\n.py-5-add-clr {\n        padding-top: 16px !important;\n}\n.nav-item {\n        flex: 0 0 auto;\n        margin-right: 1rem;\n}\n.scroll-list {\n        margin-top: 15px;\n        order: 999;\n        overflow-x: scroll;\n        -webkit-overflow-scrolling: touch; /* enables momentum scrolling on iOS */\n        white-space: nowrap;\n}\n.scroll-list ul {\n        list-style: none;\n        padding: 0;\n        margin: 0;\n}\n.scroll-list-product {\n        margin-top: 15px;\n        overflow-x: scroll;\n        -webkit-overflow-scrolling: touch; /* enables momentum scrolling on iOS */\n        white-space: nowrap;\n}\n.scroll-list-product ul {\n        list-style: none;\n        padding: 0;\n        margin: 0;\n}\n.nav-bar-add-clr {\n        height: auto !important;\n}\n.container-add-clr {\n        padding-top: 15px;\n}\n.data-cart-add-clr {\n        width: 55%;\n}\n.photo-cart-add-clr {\n        width: 45%;\n        margin-top: 30px;\n}\n.heightPhoto {\n        height: 167px;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n}\n.heightPhoto img {\n        max-height: 100%;\n        max-width: -moz-fit-content;\n        max-width: fit-content;\n        width: 50%;\n}\n.carousel-add-clr-main {\n        margin: 120px 6px auto 6px !important;\n}\n.container-product-add-clr {\n        padding-left: 30px;\n        padding-right: 30px;\n}\n}\n.card-add-clr {\n    border-radius: 1rem !important;\n.btn-lg {\n        border-radius: 1rem !important;\n}\n}\n.card-add-clr .btn-lg {\n    border-radius: 0 0 1rem 1rem !important;\n}\n.scroll-list li {\n    display: inline-block;\n    margin-right: 45px !important;\n    vertical-align: middle;\n}\n.scroll-list li:last-child {\n    margin-right: 0;\n}\n.scroll-list-product li {\n    display: inline-block;\n    margin-right: -15px !important;\n    vertical-align: middle;\n}\n.scroll-list-product li:last-child {\n    margin-right: 0;\n}\n.fixed-top {\n    position: fixed;\n    top: 0;\n    left: 30px; /* change this value to adjust the button's position */\n    z-index: 9999; /* to ensure the button is always on top */\n}\n.carousel-add-clr-main {\n    margin-top: 100px;\n    z-index: 0;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12291,6 +12642,26 @@ module.exports = "/images/123.png?20e14ac3a39881c30b00b05d77052dc7";
 /***/ ((module) => {
 
 module.exports = "/images/Free_logo.svg.png?8ad4a8d6f2626dde79347099728da119";
+
+/***/ }),
+
+/***/ "./blank.svg":
+/*!*******************!*\
+  !*** ./blank.svg ***!
+  \*******************/
+/***/ ((module) => {
+
+module.exports = "/images/blank.svg?d00d53c9de5994cfd58af98ff5dbca29";
+
+/***/ }),
+
+/***/ "./blank.webp":
+/*!********************!*\
+  !*** ./blank.webp ***!
+  \********************/
+/***/ ((module) => {
+
+module.exports = "/images/blank.webp?96a454563efe8e6433be2d93c00b4df1";
 
 /***/ }),
 
